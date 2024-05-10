@@ -50,6 +50,12 @@ class Admin
         $user = $this->db->query("SELECT * FROM user WHERE id = '$id'");
         return $user->fetch();
     }
+
+    function GetUsers()
+    {
+        return  $this->db->query("SELECT * FROM user");
+
+    }
     function UpdateUser()
 
     {

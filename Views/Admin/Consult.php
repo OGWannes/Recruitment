@@ -25,6 +25,13 @@ if(isset($_POST['ajout'])){
     header("location: home.php");
 }
 
+$allusers = $users->GetUsers();
+$listeU = [];
+while ($U = $allusers->fetch()){
+    $listeU[] = $U;
+
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -113,8 +120,7 @@ if(isset($_POST['ajout'])){
         <nav id="navbar" class="nav-menu navbar">
             <ul>
                 <li><a href="home.php" class="nav-link scrollto"><i class="bx bx-home"></i> <span>Accuiell</span></a></li>
-                <li><a href="#ajout" class="nav-link scrollto"><i class="bx bx-user"></i> <span>Add Utilisateur</span></a></li>
-                <li><a href="Consult.php" class="nav-link scrollto"><i class="bx bx-user"></i> <span>Consulter Utilisateurs</span></a></li>
+                <li><a href="#consultall" class="nav-link scrollto"><i class="bx bx-user"></i> <span>Consulter Utilisateurs</span></a></li>
             </ul>
         </nav><!-- .nav-menu -->
     </div>
@@ -147,7 +153,7 @@ if(isset($_POST['ajout'])){
 </main><!-- End #main -->
 
 <main id="main">
-    <section id="consult" class="consult">
+    <section id="consultall" class="consultall">
         <div class="container">
 
             <div class="section-title">
@@ -191,19 +197,30 @@ if(isset($_POST['ajout'])){
                                     <td><?= $items['nom']; ?></td>
                                     <td><?= $items['email'] ?></td>
                                     <td>
-                                            <button class="btn btn-primary"><?php echo '<a href="update.php?updateid='.$items['id'].'" class="text-light">Mise a jour</a>'?></button>
-                                            <button class="btn btn-danger"><?php echo '<a href="?deleteid='.$items['id'].'"  class="text-light">Delete</a> '?></button>
+                                        <button class="btn btn-primary"><?php echo '<a href="update.php?updateid='.$items['id'].'" class="text-light">Mise a jour</a>'?></button>
+                                        <button class="btn btn-danger"><?php echo '<a href="?deleteid='.$items['id'].'"  class="text-light">Delete</a> '?></button>
                                         </center></td>
                                 </tr>
                                 <?php
                             }
                         } else {
                             ?>
-                            <tr>
-                                <td colspan="4">No Record Found</td>
-                            </tr>
                             <?php
                         }
+                    }else {
+
+                        foreach ($listeU as $c) {
+                            echo "<tr>
+        <td>{$c['id']}</td>
+        <td>{$c['prenom']}</td>
+        <td>{$c['nom']}</td>
+        <td>{$c['email']}</td>
+        <td><button class='btn btn-primary'><a href='update.php?updateid='.{$c['id']} class='text-light'>Mise a jour</a></button>
+        <button class='btn btn-danger'><a href='?deleteid='{$c['id']}  class='text-light'>Delete</a></button> 
+        </td>
+        </tr>";
+                        }
+
                     }?>
                     </tbody>
                 </table>
@@ -217,68 +234,6 @@ if(isset($_POST['ajout'])){
 
         </div>
     </section><!-- End Resume Section -->
-
-    <!-- ======= About Section ======= -->
-    <section id="ajout" class="about">
-        <div class="container">
-
-            <div class="section-title">
-                <h2>Ajout d'un Utilisateur</h2>
-                <form id="addemployee" class="clearfix" method="POST" action="">
-                    <strong><div class="section_subtitle left">Données Personnel</div></strong>
-                    <form action="" id="manage_employee">
-                        <div class="row">
-                            <div class="col-md-6 border-right">
-                                <div class="form-group">
-                                    <label for="" class="control-label">E-mail</label>
-                                    <input type="text" name="email" class="form-control form-control-sm" >
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="control-label">Password</label>
-                                    <input type="password" name="password" class="form-control form-control-sm" >
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="control-label">Prénom</label>
-                                    <input type="text" name="prenom" class="form-control form-control-sm" >
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="control-label">Nom</label>
-                                    <input type="text" name="nom" class="form-control form-control-sm" >
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="control-label">Date De Naissance</label>
-                                    <input type="date" name="datenais" class="form-control form-control-sm" placeholder="yyyy-mm-dd" >
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="control-label">Teléphone</label>
-                                    <input type="text" name="phone" placeholder="123456789" class="form-control form-control-sm" >
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="control-label">Role</label>
-                                    <select type="text" name="role" class="form-control form-control-sm">
-                                        <option value="">Select option</option>
-                                        <option value="rh">Resource Humaines</option>
-                                        <option value="con">Condidate</option>
-                                        <option value="admin">Administrateur</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="control-label">Adresse</label>
-                                    <input type="text" name="address" class="form-control form-control-sm" placeholder="Your Adresse" >
-                                </div>
-                                <br>
-                                <div class="input-box">
-                                    <center><button type="submit" name="ajout" class="btn btn-primary mr-2">Ajouter</button></center>
-
-
-                                </div>
-
-                    </form>
-
-            </div>
-
-        </div>
-    </section><!-- End About Section -->
 
     <!-- ======= Footer ======= -->
     <footer id="footer">

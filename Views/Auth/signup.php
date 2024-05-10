@@ -7,18 +7,21 @@ if (isset($_POST['submit'])) {
     $email = $_POST['email'];
     $password = $_POST['loginpass'];
     $role = $_POST['role'];
-    $name = $_POST['name'];
+    $nom = $_POST['nom'];
+    $prenom = $_POST['prenom'];
+
+    $hash = password_hash($password, PASSWORD_DEFAULT);
 
     // Use double quotes to interpolate variables inside the string
-    $query = "INSERT INTO login (email, password, role, name) VALUES ('$email','$password','$role','$name')";
+    $query = "INSERT INTO user (email,password,nom,prenom,role) VALUES ('$email','$hash','$nom','$prenom','$role')";
 
     $res = mysqli_query($con, $query);
 
     if ($res) {
-        echo "<script>alert('Added Successfully, Welcome $name')</script>";
+        echo "alert('Added Successfully, Welcome $nom')";
         echo "<script>location.replace('login.php')</script>";
     } else {
-        echo "<script>alert('Oops! Something went wrong.')</script>";
+        echo "alert('Oops! Something went wrong.')";
         echo "<script>location.replace('signup.php')</script>";
     }
 }
@@ -59,30 +62,35 @@ if (isset($_POST['submit'])) {
                     <div class="col-lg-4 col-md-5 col-12">
                         <div class="p-4 bg-white rounded shadow-md mx-auto w-100" style="max-width: 400px;">
                             <form method="POST" action="">
-                                <a href="../../index.php"><img src="../images/logo-dark.png" class="mb-4 d-block mx-auto" alt=""></a>
+                                <a href="../Condidate/index.php"><img src="../images/logo-dark.png" class="mb-4 d-block mx-auto" alt=""></a>
                                 <h6 class="mb-3 text-uppercase fw-semibold">Register your account</h6>
 
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Your Name</label>
-                                    <input name="name" id="name" type="text" class="form-control" placeholder="Calvin Carlo" required>
+                                    <label class="form-label fw-semibold">Nom</label>
+                                    <input name="nom" id="nom" type="text" class="form-control" placeholder="Votre Nom" required>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Your Email</label>
+                                    <label class="form-label fw-semibold">Prenom</label>
+                                    <input name="prenom" id="prenom" type="text" class="form-control" placeholder="Votre Prenom" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Email</label>
                                     <input name="email" id="email" type="email" class="form-control" placeholder="example@website.com" required>
                                 </div>
                                     <div class="mb-3">
-                                        <label class="form-label fw-semibold">Who are you ?:</label>
+                                        <label class="form-label fw-semibold">Votre Ocuupation</label>
                                         <select name="role" class="form-control form-select" id="role">
                                             <option value="">Select an option</option>
-                                            <option value="Rh">Resource Humaine</option>
-                                            <option value="Candidateur">Condidateur</option>
+                                            <option value="rh">Resource Humaine</option>
+                                            <option value="Con">Condidateur</option>
                                         </select>
                                     </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold" for="loginpass">Password</label>
-                                    <input name="loginpass" type="password" class="form-control" id="loginpass" placeholder="Password" required>
+                                    <label class="form-label fw-semibold" for="loginpass">Mot de Passe</label>
+                                    <input name="loginpass" type="password" class="form-control" id="loginpass" placeholder="Votre Mot de passe " required>
                                 </div>
 
                                 <div class="form-check mb-3">

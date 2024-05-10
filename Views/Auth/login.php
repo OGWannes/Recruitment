@@ -37,7 +37,7 @@ include_once 'valid.php';
                     <div class="col-lg-4 col-md-5 col-12">
                         <div class="p-4 bg-white rounded shadow-md mx-auto w-100" style="max-width: 400px;">
                             <form action="" method="POST">
-                                <a href="../../index.php"><img src="../images/logo-dark.png" class="mb-4 d-block mx-auto" alt=""></a>
+                                <a href="../Condidate/index.php"><img src="../images/logo-dark.png" class="mb-4 d-block mx-auto" alt=""></a>
                                 <h6 class="mb-3 text-uppercase fw-semibold">Please sign in</h6>
                             
                                 <div class="mb-3">
