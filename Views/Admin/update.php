@@ -19,6 +19,10 @@ if(isset($_GET['updateid'])){
     $cl = $user->GetUser($_GET['updateid']);
 }
 
+if(isset($_POST['update'])){
+    $user->UpdateUser($_POST,$_GET['updateid']);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -28,12 +32,12 @@ if(isset($_GET['updateid'])){
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Gonser Groupe</title>
+  <title>TekJob</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="assets/img/logo.jpg" rel="icon">
+  <link href="assets/img/download.png" rel="icon">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -99,8 +103,7 @@ font-size: 16px;
     <div class="d-flex flex-column">
 
       <div class="profile">
-        <img src="assets/img/logo.jpg" alt="" class="img-fluid rounded-circle">
-        <h1 class="text-light"><a href="index.html">Gonser</a></h1>
+        <h1 class="text-light"><a href="home.php">TekJOB</a></h1>
         <div class="social-links mt-3 text-center">
           <a href="https://www.facebook.com/gonsergroupofficial" class="facebook"><i class="bx bxl-facebook bx-tada-hover"></i></a>
 		  <a href="https://www.linkedin.com/company/gonsergroup" class="linkedin"><i class="bx bxl-linkedin bx-tada-hover"></i></a>
@@ -109,8 +112,8 @@ font-size: 16px;
 
       <nav id="navbar" class="nav-menu navbar">
         <ul>
-          <li><a href="home.php?userid=<?php echo $cl['id'];?>" class="nav-link scrollto"><i class="bx bx-home"></i> <span>Acceuil</span></a></li>
-          <li><a href="#Update" class="nav-link scrollto"><i class="bx bx-user"></i> <span>Mise a jour d'employée</span></a></li>
+          <li><a href="home.php" class="nav-link scrollto"><i class="bx bx-home"></i> <span>Acceuil</span></a></li>
+          <li><a href="#Update" class="nav-link scrollto"><i class="bx bx-user"></i> <span>Mise a jour utilisateur</span></a></li>
         </ul>
       </nav><!-- .nav-menu -->
     </div>
@@ -122,7 +125,7 @@ font-size: 16px;
     <section class="breadcrumbs">
       <div class="container">
         <div class="d-flex justify-content-between align-items-center">
-          <h2>Welcome Gonser Administrateur</h2> 
+          <h2>Welcome TekJOB Administrateur</h2>
      <?php echo date("d/m/Y"); ?>
 			  <?php echo date("h:i:s");?> 
           <ol>
@@ -146,26 +149,26 @@ font-size: 16px;
 				<div class="row">
 					<div class="col-md-6 border-right">
                     		<label for="" class="control-label">Email</label>
-							<input type="email" name="email" class="form-control form-control-sm" value="<?php echo $cl['email'];?>"required>
+							<input type="email" name="email" class="form-control form-control-sm" value="<?php echo $cl['email'];?>">
                             <label for="" class="control-label">Password</label>
-							<input type="password" name="password" class="form-control form-control-sm" value="<?php echo $cl['password'];?>"required>
+							<input type="password" name="password" class="form-control form-control-sm" value="<?php echo $cl['password'];?>">
 							<label for="" class="control-label">Date Naissance</label>
-							<input type="text" name="cin" class="form-control form-control-sm" value="<?php echo $cl['DateNais'];?>"required>
+							<input type="text" name="DateNais" class="form-control form-control-sm" value="<?php echo $cl['DateNais'];?>">
 
 							<label for="" class="control-label">Role</label>
-                            <input type="text" name="role" class="form-control form-control-sm" value="<?php echo $cl['role'];?>"required>
+                            <input type="text" name="role" class="form-control form-control-sm" value="<?php echo $cl['role'];?>">
 
 							<label for="" class="control-label">Prénom</label>
-							<input type="text" name="prenom" class="form-control form-control-sm" value="<?php echo $cl['prenom'];?>"required>
+							<input type="text" name="prenom" class="form-control form-control-sm" value="<?php echo $cl['prenom'];?>">
 
 							<label for="" class="control-label">Nom</label>
-							<input type="text" name="nom" class="form-control form-control-sm" value="<?php echo $cl['nom'];?>"required>
+							<input type="text" name="nom" class="form-control form-control-sm" value="<?php echo $cl['nom'];?>">
 
 
 							<label for="" class="control-label">Teléphone</label>
-							<input type="text" name="phone" class="form-control form-control-sm" value="<?php echo $cl['tel'];?>"required>
+							<input type="text" name="tel" class="form-control form-control-sm" value="<?php echo $cl['tel'];?>">
 							<label for="" class="control-label">Adresse</label>
-							<input type="text" name="address" class="form-control form-control-sm" value="<?php echo $cl['addresse'];?>"required>
+							<input type="text" name="addresse" class="form-control form-control-sm" value="<?php echo $cl['addresse'];?>">
                         
 						<center><button type="submit" name="update" class="btn btn-primary mr-2">Update</button></center>
 						
@@ -189,7 +192,7 @@ font-size: 16px;
         <!-- You can delete the links only if you purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
         <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/ -->
-        Designed by <a href="https://www.linkedin.com/in/wannes-chayeb-4a61501a1/">Wannes & Beya </a>
+        Designed by <a href="https://www.linkedin.com/in/wannes-chayeb-4a61501a1/">Love ♥</a>
       </div>
     </div>
   </footer><!-- End  Footer -->

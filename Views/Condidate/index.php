@@ -3,7 +3,7 @@
 include_once '../Auth/valid.php';
 
 if(isset($_SESSION['role'])){
-    if($_SESSION['role'] != 'con'){
+    if($_SESSION['role'] != 'Con'){
         header('location: ../Auth/login.php');
 
     }

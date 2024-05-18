@@ -10,7 +10,8 @@ if (isset($_POST['submit'])) {
     $nom = $_POST['nom'];
     $prenom = $_POST['prenom'];
 
-    $hash = password_hash($password, PASSWORD_DEFAULT);
+    //$hash = password_hash($password, PASSWORD_DEFAULT);
+    $hash = md5($password);
 
     // Use double quotes to interpolate variables inside the string
     $query = "INSERT INTO user (email,password,nom,prenom,role) VALUES ('$email','$hash','$nom','$prenom','$role')";

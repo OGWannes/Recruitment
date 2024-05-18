@@ -16,13 +16,6 @@ if(isset($_SESSION['role'])){
 $users = new Admin();
 if(isset($_GET['deleteid'])){
     $users->DeleteUser($_GET['deleteid']);
-    echo "alert('User Deleted')";
-    header("location: home.php");
-}
-
-if(isset($_POST['ajout'])){
-    $users->AjoutUser($_POST);
-    header("location: home.php");
 }
 
 $allusers = $users->GetUsers();
@@ -41,7 +34,7 @@ while ($U = $allusers->fetch()){
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>HACO Shipyard</title>
+    <title>TekJob</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -215,8 +208,8 @@ while ($U = $allusers->fetch()){
         <td>{$c['prenom']}</td>
         <td>{$c['nom']}</td>
         <td>{$c['email']}</td>
-        <td><button class='btn btn-primary'><a href='update.php?updateid='.{$c['id']} class='text-light'>Mise a jour</a></button>
-        <button class='btn btn-danger'><a href='?deleteid='{$c['id']}  class='text-light'>Delete</a></button> 
+        <td><button class='btn btn-primary'><a href='update.php?updateid={$c['id']}' class='text-light'>Mise a jour</a></button>
+        <button class='btn btn-danger'><a href='?deleteid={$c['id']}'  class='text-light'>Delete</a></button> 
         </td>
         </tr>";
                         }

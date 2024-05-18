@@ -15,11 +15,11 @@ if (isset($_POST['submit'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-
-
     $query = "SELECT * FROM user WHERE email = '$email' AND password ='$password'";
 
     $res = mysqli_query($con, $query);
+    echo $password;
+    echo $_POST['password'];
 
     if (mysqli_num_rows($res) > 0) {
 
@@ -29,9 +29,9 @@ if (isset($_POST['submit'])) {
            /* if (password_verify($password,$row["password"])){
                 echo "<script>alert('Logged in successfully')</script>";
             }else{
-                echo "<script>alert('Woops! Email or Password incorrect')</script>";
+                echo "<script>alert('404 Ereur')</script>";
             }*/
-            if ($row["role"] == "con"){
+            if ($row["role"] == "Con"){
                 $_SESSION["prenom"] = $row["prenom"];
                 $_SESSION["email"] = $row["email"];
                 $_SESSION["role"] = $row["role"];
@@ -65,6 +65,8 @@ if (isset($_POST['submit'])) {
             }
 
         }
+    }else{
+        echo "<script>alert('Woops! Email or Password incorrect')</script>";
     }
 
 
