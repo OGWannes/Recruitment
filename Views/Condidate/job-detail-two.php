@@ -1,7 +1,29 @@
+<?php
+
+include_once '../Auth/valid.php';
+include_once '../../Classes/Job.php';
+
+
+if(isset($_SESSION['role'])){
+    if($_SESSION['role'] != 'con'){
+        header('location: ../Auth/login.php');
+
+    }
+
+}
+
+$job = new Job();
+
+if (isset($_GET['jobid'])){
+    $j = $job->GetJob($_GET['jobid']);
+}
+
+
+?>
 <!doctype html>
 <html lang="en">
 	
-<!-- Mirrored from shreethemes.in/jobnova/layouts/job-detail-two.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Apr 2024 13:09:24 GMT -->
+<!-- Mirrored from shreethemes.in/jobnova/layouts/job-detail-two.php by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Apr 2024 13:09:24 GMT -->
 <head>
 		<meta charset="UTF-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,21 +35,21 @@
 	    <meta name="email" content="support@shreethemes.in" />
 	    <meta name="version" content="1.0.0" />
 	    <!-- favicon -->
-        <link href="Views/images/favicon.ico" rel="shortcut icon">
+        <link href="../images/favicon.ico" rel="shortcut icon">
 		<!-- Bootstrap core CSS -->
-	    <link href="Views/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-        <link href="Views/css/tobii.min.css" rel="stylesheet" type="text/css" />
-        <link href="Views/css/choices.min.css" rel="stylesheet" />
-        <link href="Views/css/materialdesignicons.min.css" rel="stylesheet" type="text/css" />
+	    <link href="../css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+        <link href="../css/tobii.min.css" rel="stylesheet" type="text/css" />
+        <link href="../css/choices.min.css" rel="stylesheet" />
+        <link href="../css/materialdesignicons.min.css" rel="stylesheet" type="text/css" />
 	    <!-- Custom  Css -->
-	    <link href="Views/css/style.min.css" rel="stylesheet" type="text/css" id="theme-opt" />
+	    <link href="../css/style.min.css" rel="stylesheet" type="text/css" id="theme-opt" />
 	</head>
 
 	<body>
         <!-- Navbar STart -->
         <header id="topnav" class="defaultscroll sticky">
             <div class="container">
-                <a class="logo" href="Views/Condidate/index.php">
+                <a class="logo" href="index.php">
                     <img src="Views/images/logo-dark.png" class="logo-light-mode" alt="">
                     <img src="Views/images/logo-light.png" class="logo-dark-mode" alt="">
                 </a>
@@ -66,14 +88,13 @@
                     <li class="list-inline-item ps-1 mb-0">
                         <div class="dropdown dropdown-primary">
                             <button type="button" class="dropdown-toggle btn btn-sm btn-icon btn-pills btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="Views/images/team/01.jpg" class="img-fluid rounded-pill" alt="">
+                                <img src="../images/team/01.jpg" class="img-fluid rounded-pill" alt="">
                             </button>
                             <div class="dropdown-menu dd-menu dropdown-menu-end bg-white rounded shadow border-0 mt-3">
-                                <a href="Views/Condidate/candidate-profile.php" class="dropdown-item fw-medium fs-6"><i data-feather="user" class="fea icon-sm me-2 align-middle"></i>Profile</a>
+                                <a href="candidate-profile.php" class="dropdown-item fw-medium fs-6"><i data-feather="user" class="fea icon-sm me-2 align-middle"></i>Profile</a>
                                 <a href="candidate-profile-setting.php" class="dropdown-item fw-medium fs-6"><i data-feather="settings" class="fea icon-sm me-2 align-middle"></i>Settings</a>
                                 <div class="dropdown-divider border-top"></div>
-                                <a href="lock-screen.html" class="dropdown-item fw-medium fs-6"><i data-feather="lock" class="fea icon-sm me-2 align-middle"></i>Lockscreen</a>
-                                <a href="Views/Auth/login.php" class="dropdown-item fw-medium fs-6"><i data-feather="log-out" class="fea icon-sm me-2 align-middle"></i>Logout</a>
+                                <a href="../Auth/login.php" class="dropdown-item fw-medium fs-6"><i data-feather="log-out" class="fea icon-sm me-2 align-middle"></i>Logout</a>
                             </div>
                         </div>
                     </li>
@@ -85,64 +106,64 @@
                         <li class="has-submenu parent-menu-item">
                             <a href="javascript:void(0)">Home</a><span class="menu-arrow"></span>
                             <ul class="submenu">
-                                <li><a href="Views/Condidate/index.php" class="sub-menu-item">Hero One</a></li>
-                                <li><a href="index-two.html" class="sub-menu-item">Hero Two</a></li>
-                                <li><a href="index-three.html" class="sub-menu-item">Hero Three</a></li>
+                                <li><a href="index.php" class="sub-menu-item">Hero One</a></li>
+                                <li><a href="../../index-two.html" class="sub-menu-item">Hero Two</a></li>
+                                <li><a href="../../index-three.html" class="sub-menu-item">Hero Three</a></li>
                             </ul>
                         </li>
 
                         <li class="has-submenu parent-parent-menu-item"><a href="javascript:void(0)"> Jobs </a><span class="menu-arrow"></span>
                             <ul class="submenu">
-                                <li><a href="job-categories.html" class="sub-menu-item">Job Categories</a></li>
+                                <li><a href="../../job-categories.html" class="sub-menu-item">Job Categories</a></li>
                         
                                 <li class="has-submenu parent-menu-item">
                                     <a href="javascript:void(0)"> Job Grids </a><span class="submenu-arrow"></span>
                                     <ul class="submenu">
-                                        <li><a href="job-grid-one.html" class="sub-menu-item">Job Grid One</a></li>
-                                        <li><a href="job-grid-two.html" class="sub-menu-item">Job Grid Two</a></li>
-                                        <li><a href="job-grid-three.html" class="sub-menu-item">Job Grid Three</a></li>
-                                        <li><a href="job-grid-four.html" class="sub-menu-item">Job Grid Four </a></li>
+                                        <li><a href="../../job-grid-one.html" class="sub-menu-item">Job Grid One</a></li>
+                                        <li><a href="../../job-grid-two.html" class="sub-menu-item">Job Grid Two</a></li>
+                                        <li><a href="../../job-grid-three.html" class="sub-menu-item">Job Grid Three</a></li>
+                                        <li><a href="job-grid-four.php" class="sub-menu-item">Job Grid Four </a></li>
                                     </ul>  
                                 </li>
 
                                 <li class="has-submenu parent-menu-item">
                                     <a href="javascript:void(0)"> Job Lists </a><span class="submenu-arrow"></span>
                                     <ul class="submenu">
-                                        <li><a href="job-list-one.html" class="sub-menu-item">Job List One</a></li>
-                                        <li><a href="job-list-two.html" class="sub-menu-item">Job List Two</a></li>
+                                        <li><a href="../../job-list-one.html" class="sub-menu-item">Job List One</a></li>
+                                        <li><a href="../../job-list-two.html" class="sub-menu-item">Job List Two</a></li>
                                     </ul>  
                                 </li>
 
                                 <li class="has-submenu parent-menu-item">
                                     <a href="javascript:void(0)"> Job Detail </a><span class="submenu-arrow"></span>
                                     <ul class="submenu">
-                                        <li><a href="job-detail-one.html" class="sub-menu-item">Job Detail One</a></li>
+                                        <li><a href="../../job-detail-one.html" class="sub-menu-item">Job Detail One</a></li>
                                         <li><a href="job-detail-two.html" class="sub-menu-item">Job Detail Two</a></li>
-                                        <li><a href="job-detail-three.html" class="sub-menu-item">Job Detail Three</a></li>
+                                        <li><a href="../../job-detail-three.html" class="sub-menu-item">Job Detail Three</a></li>
                                     </ul>  
                                 </li>
                 
-                                <li><a href="job-apply.html" class="sub-menu-item">Job Apply</a></li>
+                                <li><a href="job-apply.php" class="sub-menu-item">Job Apply</a></li>
                 
-                                <li><a href="job-post.html" class="sub-menu-item">Job Post </a></li>
+                                <li><a href="../../job-post.html" class="sub-menu-item">Job Post </a></li>
                 
-                                <li><a href="career.html" class="sub-menu-item">Career </a></li>
+                                <li><a href="../../career.html" class="sub-menu-item">Career </a></li>
                             </ul>  
                         </li>
                 
                         <li class="has-submenu parent-menu-item">
                             <a href="javascript:void(0)">Employers</a><span class="menu-arrow"></span>
                             <ul class="submenu">
-                                <li><a href="employers.html" class="sub-menu-item">Employers</a></li>
-                                <li><a href="employer-profile.html" class="sub-menu-item">Employer Profile</a></li>
+                                <li><a href="../../employers.html" class="sub-menu-item">Employers</a></li>
+                                <li><a href="../../employer-profile.html" class="sub-menu-item">Employer Profile</a></li>
                             </ul>
                         </li>
                 
                         <li class="has-submenu parent-menu-item">
                             <a href="javascript:void(0)">Candidates</a><span class="menu-arrow"></span>
                             <ul class="submenu">
-                                <li><a href="candidates.html" class="sub-menu-item">Candidates</a></li>
-                                <li><a href="Views/Condidate/candidate-profile.php" class="sub-menu-item">Candidate Profile</a></li>
+                                <li><a href="../../candidates.html" class="sub-menu-item">Candidates</a></li>
+                                <li><a href="candidate-profile.php" class="sub-menu-item">Candidate Profile</a></li>
                                 <li><a href="candidate-profile-setting.php" class="sub-menu-item">Profile Setting</a></li>
                             </ul>
                         </li>
@@ -150,55 +171,55 @@
                         <li class="has-submenu parent-parent-menu-item">
                             <a href="javascript:void(0)">Pages</a><span class="menu-arrow"></span>
                             <ul class="submenu">
-                                <li><a href="aboutus.html" class="sub-menu-item">About Us</a></li>
-                                <li><a href="services.html" class="sub-menu-item">Services</a></li>
-                                <li><a href="pricing.html" class="sub-menu-item">Pricing </a></li>
+                                <li><a href="../../aboutus.html" class="sub-menu-item">About Us</a></li>
+                                <li><a href="../../services.html" class="sub-menu-item">Services</a></li>
+                                <li><a href="../../pricing.html" class="sub-menu-item">Pricing </a></li>
 
                                 <li class="has-submenu parent-menu-item">
                                     <a href="javascript:void(0)"> Helpcenter </a><span class="submenu-arrow"></span>
                                     <ul class="submenu">
-                                        <li><a href="helpcenter-overview.html" class="sub-menu-item">Overview</a></li>
-                                        <li><a href="helpcenter-faqs.html" class="sub-menu-item">FAQs</a></li>
-                                        <li><a href="helpcenter-guides.html" class="sub-menu-item">Guides</a></li>
-                                        <li><a href="helpcenter-support.html" class="sub-menu-item">Support</a></li>
+                                        <li><a href="../../helpcenter-overview.html" class="sub-menu-item">Overview</a></li>
+                                        <li><a href="../../helpcenter-faqs.html" class="sub-menu-item">FAQs</a></li>
+                                        <li><a href="../../helpcenter-guides.html" class="sub-menu-item">Guides</a></li>
+                                        <li><a href="../../helpcenter-support.html" class="sub-menu-item">Support</a></li>
                                     </ul>  
                                 </li>
 
                                 <li class="has-submenu parent-menu-item"><a href="javascript:void(0)"> Blog </a><span class="submenu-arrow"></span>
                                     <ul class="submenu">
-                                        <li><a href="blogs.html" class="sub-menu-item"> Blogs</a></li>
-                                        <li><a href="blog-sidebar.html" class="sub-menu-item"> Blog Sidebar</a></li>
-                                        <li><a href="blog-detail.html" class="sub-menu-item"> Blog Detail</a></li>
+                                        <li><a href="../../blogs.html" class="sub-menu-item"> Blogs</a></li>
+                                        <li><a href="../../blog-sidebar.html" class="sub-menu-item"> Blog Sidebar</a></li>
+                                        <li><a href="../../blog-detail.html" class="sub-menu-item"> Blog Detail</a></li>
                                     </ul> 
                                 </li>
 
                                 <li class="has-submenu parent-menu-item"><a href="javascript:void(0)"> Auth Pages </a><span class="submenu-arrow"></span>
                                     <ul class="submenu">
-                                        <li><a href="Views/Auth/login.php" class="sub-menu-item"> Login</a></li>
-                                        <li><a href="Views/Auth/signup.php" class="sub-menu-item"> Signup</a></li>
-                                        <li><a href="reset-password.html" class="sub-menu-item"> Forgot Password</a></li>
-                                        <li><a href="lock-screen.html" class="sub-menu-item"> Lock Screen</a></li>
+                                        <li><a href="../Auth/login.php" class="sub-menu-item"> Login</a></li>
+                                        <li><a href="../Auth/signup.php" class="sub-menu-item"> Signup</a></li>
+                                        <li><a href="../../reset-password.html" class="sub-menu-item"> Forgot Password</a></li>
+                                        <li><a href="../../lock-screen.html" class="sub-menu-item"> Lock Screen</a></li>
                                     </ul> 
                                 </li>
 
                                 <li class="has-submenu parent-menu-item"><a href="javascript:void(0)"> Utility </a><span class="submenu-arrow"></span>
                                     <ul class="submenu">
-                                        <li><a href="terms.html" class="sub-menu-item">Terms of Services</a></li>
-                                        <li><a href="privacy.html" class="sub-menu-item">Privacy Policy</a></li>
+                                        <li><a href="../../terms.html" class="sub-menu-item">Terms of Services</a></li>
+                                        <li><a href="../../privacy.html" class="sub-menu-item">Privacy Policy</a></li>
                                     </ul>  
                                 </li>
 
                                 <li class="has-submenu parent-menu-item"><a href="javascript:void(0)"> Special </a><span class="submenu-arrow"></span>
                                     <ul class="submenu">
-                                        <li><a href="comingsoon.html" class="sub-menu-item"> Coming Soon</a></li>
-                                        <li><a href="maintenance.html" class="sub-menu-item"> Maintenance</a></li>
-                                        <li><a href="error.html" class="sub-menu-item"> 404! Error</a></li>
+                                        <li><a href="../../comingsoon.html" class="sub-menu-item"> Coming Soon</a></li>
+                                        <li><a href="../../maintenance.html" class="sub-menu-item"> Maintenance</a></li>
+                                        <li><a href="../../error.html" class="sub-menu-item"> 404! Error</a></li>
                                     </ul> 
                                 </li>
                             </ul>
                         </li>
                 
-                        <li><a href="contactus.html" class="sub-menu-item">Contact Us</a></li>
+                        <li><a href="contactus.php" class="sub-menu-item">Contact Us</a></li>
                     </ul><!--end navigation menu-->
                 </div><!--end navigation-->
             </div>
@@ -212,50 +233,30 @@
                     <div class="col-lg-8 col-md-6 col-12">
 
                         <div class="d-lg-flex align-items-center p-4 rounded shadow bg-white mb-4">
-                            <img src="Views/images/company/lenovo-logo.png" class="avatar avatar-medium p-4 rounded-pill shadow bg-white" alt="">
+                            <img src="../images/company/lenovo-logo.png" class="avatar avatar-medium p-4 rounded-pill shadow bg-white" alt="">
 
                             <div class="ms-lg-3 mt-3 mt-lg-0">
-                                <h4>Back-End Developer</h4>
+                                <h4><?php echo $j['job_name'];?></h4>
 
                                 <ul class="list-unstyled mb-0">
-                                    <li class="d-inline-flex align-items-center text-muted me-2"><i data-feather="layout" class="fea icon-sm text-primary me-1"></i> Lenovo pvt. ltd.</li>
-                                    <li class="d-inline-flex align-items-center text-muted"><i data-feather="map-pin" class="fea icon-sm text-primary me-1"></i> Beijing, China</li>
+                                    <li class="d-inline-flex align-items-center text-muted me-2"><i data-feather="layout" class="fea icon-sm text-primary me-1"></i> Tek-UP</li>
+                                    <li class="d-inline-flex align-items-center text-muted"><i data-feather="map-pin" class="fea icon-sm text-primary me-1"></i><?php echo $j['Loc'];?></li>
                                 </ul>
                             </div>
                         </div>
 
                         <h5>Job Description: </h5>
-                        <p class="text-muted">One disadvantage of Lorum Ipsum is that in Latin certain letters appear more frequently than others - which creates a distinct visual impression. Moreover, in Latin only words at the beginning of sentences are capitalized.</p>
-                        <p class="text-muted">This means that Lorem Ipsum cannot accurately represent, for example, German, in which all nouns are capitalized. Thus, Lorem Ipsum has only limited suitability as a visual filler for German texts. If the fill text is intended to illustrate the characteristics of different typefaces.</p>
-                        <p class="text-muted">It sometimes makes sense to select texts containing the various letters and symbols specific to the output language.</p>
+                        <p class="text-muted"><?php echo $j['description'];?></p>
                         
                         <h5 class="mt-4">Responsibilities and Duties: </h5>
-                        <p class="text-muted">It sometimes makes sense to select texts containing the various letters and symbols specific to the output language.</p>
-                        <ul class="list-unstyled">
-                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Participate in requirements analysis</li>
-                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Write clean, scalable code using C# and .NET frameworks</li>
-                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Test and deploy applications and systems</li>
-                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Revise, update, refactor and debug code</li>
-                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Improve existing software</li>
-                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Develop documentation throughout the software development life cycle (SDLC)</li>
-                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Serve as an expert on applications and provide technical support</li>
-                        </ul>
+                        <p class="text-muted"><?php echo $j['Responsibilities_Duties'];?></p>
 
                         <h5 class="mt-4">Required Experience, Skills and Qualifications: </h5>
-                        <p class="text-muted">It sometimes makes sense to select texts containing the various letters and symbols specific to the output language.</p>
-                        <ul class="list-unstyled">
-                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Proven experience as a .NET Developer or Application Developer</li>
-                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>good understanding of SQL and Relational Databases, specifically Microsoft SQL Server.</li>
-                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Experience designing, developing and creating RESTful web services and APIs</li>
-                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Basic know how of Agile process and practices</li>
-                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Good understanding of object-oriented programming.</li>
-                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Good understanding of concurrent programming.</li>
-                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Sound knowledge of application architecture and design.</li>
-                            <li class="text-muted mt-2"><i data-feather="arrow-right" class="fea icon-sm text-primary me-2"></i>Excellent problem solving and analytical skills</li>
-                        </ul>
+                        <p class="text-muted"><?php echo $j['RESQ'];?></p>
+
 
                         <div class="mt-4">
-                            <a href="job-apply.html" class="btn btn-outline-primary">Apply Now <i class="mdi mdi-send"></i></a>
+                            <a href="job-apply.php?jobid=<?php echo $j['id'];?>" class="btn btn-outline-primary">Apply Now <i class="mdi mdi-send"></i></a>
                         </div>
                     </div><!--end col-->
 
@@ -270,7 +271,7 @@
                                     <i data-feather="layout" class="fea icon-ex-md me-3"></i>
                                     <div class="flex-1">
                                         <h6 class="widget-title mb-0">Company Name:</h6>
-                                        <small class="text-primary mb-0">Lenovo</small>
+                                        <small class="text-primary mb-0">TEK-UP</small>
                                     </div>
                                 </div>
 
@@ -278,7 +279,7 @@
                                     <i data-feather="user-check" class="fea icon-ex-md me-3"></i>
                                     <div class="flex-1">
                                         <h6 class="widget-title mb-0">Employee Type:</h6>
-                                        <small class="text-primary mb-0">Full Time</small>
+                                        <small class="text-primary mb-0"><?php echo $j['Employee_Type'];?></small>
                                     </div>
                                 </div>
 
@@ -286,7 +287,7 @@
                                     <i data-feather="map-pin" class="fea icon-ex-md me-3"></i>
                                     <div class="flex-1">
                                         <h6 class="widget-title mb-0">Location:</h6>
-                                        <small class="text-primary mb-0">Beijing, China</small>
+                                        <small class="text-primary mb-0"><?php echo $j['Loc'];?></small>
                                     </div>
                                 </div>
 
@@ -294,7 +295,7 @@
                                     <i data-feather="monitor" class="fea icon-ex-md me-3"></i>
                                     <div class="flex-1">
                                         <h6 class="widget-title mb-0">Job Type:</h6>
-                                        <small class="text-primary mb-0">Back-end Developer</small>
+                                        <small class="text-primary mb-0"><?php echo $j['job_name'];?></small>
                                     </div>
                                 </div>
 
@@ -302,7 +303,7 @@
                                     <i data-feather="briefcase" class="fea icon-ex-md me-3"></i>
                                     <div class="flex-1">
                                         <h6 class="widget-title mb-0">Experience:</h6>
-                                        <small class="text-primary mb-0">+2 Year</small>
+                                        <small class="text-primary mb-0"><?php echo $j['Experience'];?></small>
                                     </div>
                                 </div>
 
@@ -310,7 +311,7 @@
                                     <i data-feather="book" class="fea icon-ex-md me-3"></i>
                                     <div class="flex-1">
                                         <h6 class="widget-title mb-0">Qualifications:</h6>
-                                        <small class="text-primary mb-0">MSCIT</small>
+                                        <small class="text-primary mb-0"><?php echo $j['Qualification'];?></small>
                                     </div>
                                 </div>
 
@@ -318,7 +319,7 @@
                                     <i data-feather="dollar-sign" class="fea icon-ex-md me-3"></i>
                                     <div class="flex-1">
                                         <h6 class="widget-title mb-0">Salary:</h6>
-                                        <small class="text-primary mb-0">+50k to 70k</small>
+                                        <small class="text-primary mb-0"><?php echo $j['Salary'];?>TND</small>
                                     </div>
                                 </div>
 
@@ -326,7 +327,7 @@
                                     <i data-feather="clock" class="fea icon-ex-md me-3"></i>
                                     <div class="flex-1">
                                         <h6 class="widget-title mb-0">Date posted:</h6>
-                                        <small class="text-primary mb-0 mb-0">5th Sep, 2021</small>
+                                        <small class="text-primary mb-0 mb-0"><?php echo $j['Date_Post'];?></small>
                                     </div>
                                 </div>
                             </div>
@@ -359,10 +360,10 @@
                                 </ul>
                             </div>
                             <div class="d-flex align-items-center p-4 border-top">
-                                <img src="Views/images/company/facebook-logo.png" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
+                                <img src="../images/company/facebook-logo.png" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
 
                                 <div class="ms-3">
-                                    <a href="employer-profile.html" class="h5 company text-dark">Facebook</a>
+                                    <a href="../../employer-profile.html" class="h5 company text-dark">Facebook</a>
                                     <span class="text-muted d-flex align-items-center mt-1"><i data-feather="map-pin" class="fea icon-sm me-1"></i>Australia</span>
                                 </div>
                             </div>
@@ -382,10 +383,10 @@
                                 </ul>
                             </div>
                             <div class="d-flex align-items-center p-4 border-top">
-                                <img src="Views/images/company/google-logo.png" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
+                                <img src="../images/company/google-logo.png" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
 
                                 <div class="ms-3">
-                                    <a href="employer-profile.html" class="h5 company text-dark">Google</a>
+                                    <a href="../../employer-profile.html" class="h5 company text-dark">Google</a>
                                     <span class="text-muted d-flex align-items-center mt-1"><i data-feather="map-pin" class="fea icon-sm me-1"></i>Australia</span>
                                 </div>
                             </div>
@@ -405,10 +406,10 @@
                                 </ul>
                             </div>
                             <div class="d-flex align-items-center p-4 border-top">
-                                <img src="Views/images/company/whatsapp.png" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
+                                <img src="../images/company/whatsapp.png" class="avatar avatar-small rounded shadow p-3 bg-white" alt="">
 
                                 <div class="ms-3">
-                                    <a href="employer-profile.html" class="h5 company text-dark">Whatsapp</a>
+                                    <a href="../../employer-profile.html" class="h5 company text-dark">Whatsapp</a>
                                     <span class="text-muted d-flex align-items-center mt-1"><i data-feather="map-pin" class="fea icon-sm me-1"></i>Australia</span>
                                 </div>
                             </div>
@@ -438,8 +439,8 @@
 
                         <div class="col-md-5 mt-4 mt-sm-0">
                             <div class="text-md-end ms-5 ms-sm-0">
-                                <a href="job-apply.html" class="btn btn-primary me-1 my-1">Apply Now</a>
-                                <a href="contactus.html" class="btn btn-soft-primary my-1">Contact Us</a>
+                                <a href="job-apply.php" class="btn btn-primary me-1 my-1">Apply Now</a>
+                                <a href="contactus.php" class="btn btn-soft-primary my-1">Contact Us</a>
                             </div>
                         </div><!--end col-->
                     </div><!--end row-->
@@ -458,11 +459,11 @@
         
                                 <div class="col-sm-9 mt-4 mt-sm-0">
                                     <ul class="list-unstyled footer-list terms-service text-center text-sm-end mb-0">
-                                        <li class="list-inline-item my-2"><a href="Views/Condidate/index.php" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> Home</a></li>
-                                        <li class="list-inline-item my-2"><a href="services.html" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> How it works</a></li>
-                                        <li class="list-inline-item my-2"><a href="job-post.html" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> Create a job</a></li>
-                                        <li class="list-inline-item my-2"><a href="aboutus.html" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> About us</a></li>
-                                        <li class="list-inline-item my-2"><a href="pricing.html" class="text-foot fs-6 fw-medium"><i class="mdi mdi-circle-small"></i> Plans</a></li>
+                                        <li class="list-inline-item my-2"><a href="index.php" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> Home</a></li>
+                                        <li class="list-inline-item my-2"><a href="../../services.html" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> How it works</a></li>
+                                        <li class="list-inline-item my-2"><a href="../../job-post.html" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> Create a job</a></li>
+                                        <li class="list-inline-item my-2"><a href="../../aboutus.html" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> About us</a></li>
+                                        <li class="list-inline-item my-2"><a href="../../pricing.html" class="text-foot fs-6 fw-medium"><i class="mdi mdi-circle-small"></i> Plans</a></li>
                                     </ul>
                                 </div><!--end col-->
                             </div><!--end row-->
@@ -501,14 +502,14 @@
         <!-- Back to top -->
 
         <!-- JAVASCRIPTS -->
-	    <script src="Views/js/bootstrap.bundle.min.js"></script>
-        <script src="Views/js/tobii.min.js"></script>
-        <script src="Views/js/choices.min.js"></script>
-        <script src="Views/js/feather.min.js"></script>
+	    <script src="../js/bootstrap.bundle.min.js"></script>
+        <script src="../js/tobii.min.js"></script>
+        <script src="../js/choices.min.js"></script>
+        <script src="../js/feather.min.js"></script>
 	    <!-- Custom -->
-	    <script src="Views/js/plugins.init.js"></script>
-	    <script src="Views/js/app.js"></script>
+	    <script src="../js/plugins.init.js"></script>
+	    <script src="../js/app.js"></script>
     </body>
 
-<!-- Mirrored from shreethemes.in/jobnova/layouts/job-detail-two.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Apr 2024 13:09:24 GMT -->
+<!-- Mirrored from shreethemes.in/jobnova/layouts/job-detail-two.php by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Apr 2024 13:09:24 GMT -->
 </html>

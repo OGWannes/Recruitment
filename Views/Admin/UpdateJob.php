@@ -1,6 +1,7 @@
 <?php
-include_once '../Auth/valid.php';
+
 include "../../Classes/Admin.php";
+
 
 if(isset($_SESSION['role'])){
 
@@ -9,20 +10,17 @@ if(isset($_SESSION['role'])){
 
     }
 
-}else{
-    header('location: ../Auth/login.php');
 }
 
-$users = new Admin();
-if(isset($_GET['deleteid'])){
-    $users->DeleteUser($_GET['deleteid']);
-    echo "alert('User Deleted')";
-    header("location: home.php");
+
+$user = new Admin();
+
+if(isset($_GET['updateid'])){
+    $cl = $user->GetJob($_GET['updateid']);
 }
 
-if(isset($_POST['ajout'])){
-    $users->AjoutUser($_POST);
-    header("location: home.php");
+if(isset($_POST['updatejob'])){
+    $user->UpdateJob($_POST,$_GET['updateid']);
 }
 
 ?>
@@ -57,6 +55,8 @@ if(isset($_POST['ajout'])){
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="assets/css/styleness.css" rel="stylesheet">
+
+
     <style>
 
 
@@ -84,6 +84,7 @@ if(isset($_POST['ajout'])){
 
     </style>
 
+
     <!-- =======================================================
     * Template Name: iPortfolio - v3.7.0
     * Template URL: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/
@@ -102,18 +103,17 @@ if(isset($_POST['ajout'])){
     <div class="d-flex flex-column">
 
         <div class="profile">
-            <br>
-            <h1 class="text-light"><a href="home.php">TEK JOB</a></h1>
+            <h1 class="text-light"><a href="home.php">TekJOB</a></h1>
             <div class="social-links mt-3 text-center">
-                <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-                <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+                <a href="https://www.facebook.com/gonsergroupofficial" class="facebook"><i class="bx bxl-facebook bx-tada-hover"></i></a>
+                <a href="https://www.linkedin.com/company/gonsergroup" class="linkedin"><i class="bx bxl-linkedin bx-tada-hover"></i></a>
             </div>
         </div>
 
         <nav id="navbar" class="nav-menu navbar">
             <ul>
                 <li><a href="home.php" class="nav-link scrollto"><i class="bx bx-home"></i> <span>Accuiell</span></a></li>
-                <li><a href="#ajout" class="nav-link scrollto"><i class="bx bx-user"></i> <span>Ajouter Utilisateur</span></a></li>
+                <li><a href="home.php" class="nav-link scrollto"><i class="bx bx-user"></i> <span>Ajouter Utilisateur</span></a></li>
                 <li><a href="Consult.php" class="nav-link scrollto"><i class="bx bx-user"></i> <span>Consulter Utilisateurs</span></a></li>
                 <li><a href="Contacts.php" class="nav-link scrollto"><i class="bx bx-archive"></i> <span>Consulter Contacts</span></a></li>
                 <li><a href="CreateJob.php" class="nav-link scrollto"><i class="bx bx-user-check"></i> <span>Ajouter Job</span></a></li>
@@ -131,137 +131,84 @@ if(isset($_POST['ajout'])){
     <section class="breadcrumbs">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
-                <h2>Bonjour TEKJOB Administrateur</h2>
+                <h2>Welcome TekJOB Administrateur</h2>
                 <?php echo date("d/m/Y"); ?>
                 <?php echo date("h:i:s");?>
                 <ol>
 
-                    <li><strong><button type="button" class="button1"><a href="../../Classes/Logout.php" class="text-light">Desconnect</a></button></strong></li>
+                    <li><strong><button type="button" class="button1"><a href="../Auth/logout.php" class="text-light">Déconnecter</a></button></strong></li>
                 </ol>
             </div>
 
         </div>
     </section><!-- End Breadcrumbs -->
 
-    <section id="home" class="d-flex flex-column justify-content-center align-items-center">
-        <div class="home" data-aos="fade-in">
-            <h1>TEK JOB</h1>
-            <center><span class="typed" data-typed-items="Wait for it, Wait... , LEGENDARYYYYYYY"></span></center>
-        </div>
-    </section>
-</main><!-- End #main -->
-
-<main id="main">
-    <section id="consult" class="consult">
-        <div class="container">
-
-            <div class="section-title">
-                <h2>Consulté</h2>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-7">
-
-                            <form action="" method="GET">
-                                <div class="input-group mb-3">
-                                    <input type="text" name="search" placeholder="Nom/Prenom/EMAIL" required value="<?php if(isset($_GET['search'])){echo $_GET['search']; } ?>" class="form-control" placeholder="Search data">
-                                    <button type="submit" class="btn btn-primary">Cherche</button>
-                                </div>
-                            </form>
-
-                        </div>
-                    </div>
-                </div>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">id</th>
-                        <th scope="col">Prenom</th>
-                        <th scope="col">Nom</th>
-                        <th scope="col">E-mail</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    if (isset($_GET['search'])) {
-                        $filtervalues = $_GET['search'];
-                        $query = "SELECT * FROM user WHERE CONCAT (user.prenom,user.email) LIKE '%$filtervalues%' ";
-                        $query_run = mysqli_query($con, $query);
-                        if (mysqli_num_rows($query_run) > 0) {
-                            foreach ($query_run as $items) {
-                                ?>
-                                <tr>
-                                    <td><?= $items['id']; ?></td>
-                                    <td><?= $items['prenom']; ?></td>
-                                    <td><?= $items['nom']; ?></td>
-                                    <td><?= $items['email'] ?></td>
-                                    <td>
-                                            <button class="btn btn-primary"><?php echo '<a href="update.php?updateid='.$items['id'].'" class="text-light">Mise a jour</a>'?></button>
-                                            <button class="btn btn-danger"><?php echo '<a href="?deleteid='.$items['id'].'"  class="text-light">Delete</a> '?></button>
-                                        </center></td>
-                                </tr>
-                                <?php
-                            }
-                        } else {
-                            ?>
-                            <tr>
-                                <td colspan="4">No Record Found</td>
-                            </tr>
-                            <?php
-                        }
-                    }?>
-                    </tbody>
-                </table>
-
-
-            </div>
-
-
-        </div>
-        </div>
-
-        </div>
-    </section><!-- End Resume Section -->
-
-    <!-- ======= About Section ======= -->
+    <!-- ======= Update Section ======= -->
     <section id="ajout" class="about">
         <div class="container">
-
             <div class="section-title">
-                <h2>Ajout d'un Utilisateur</h2>
+                <h2>Update Job</h2>
                 <form id="addemployee" class="clearfix" method="POST" action="">
-                    <strong><div class="section_subtitle left">Données Personnel</div></strong>
+                    <strong><div class="section_subtitle left">Données job</div></strong>
                     <form action="" id="manage_employee">
                         <div class="row">
                             <div class="col-md-6 border-right">
                                 <div class="form-group">
-                                    <label for="" class="control-label">E-mail</label>
-                                    <input type="text" name="email" class="form-control form-control-sm" >
+                                    <label for="" class="control-label">Job Name</label>
+                                    <input type="text" name="job_name" class="form-control form-control-sm" value="<?php echo $cl['job_name'];?>">
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="control-label">Password</label>
-                                    <input type="password" name="password" class="form-control form-control-sm" >
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="control-label">Prénom</label>
-                                    <input type="text" name="prenom" class="form-control form-control-sm" >
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="control-label">Nom</label>
-                                    <input type="text" name="nom" class="form-control form-control-sm" >
-                                </div>
-                                <div class="form-group">
-                                    <label for="" class="control-label">Role</label>
-                                    <select type="text" name="role" class="form-control form-control-sm">
-                                        <option value="">Select option</option>
-                                        <option value="rh">Resource Humaines</option>
-                                        <option value="con">Condidate</option>
-                                        <option value="admin">Administrateur</option>
+                                    <label for="" class="control-label">Employee Type</label>
+                                    <select type="text" name="Employee_Type" class="form-control form-control-sm" >
+                                        <option value="value="<?php echo $cl['Employee_Type'];?>"">Select option</option>
+                                        <option value="Full Time">Full Time</option>
+                                        <option value="Part Time">Part Time</option>
+                                        <option value="Freelancing">Freelancing</option>
+                                        <option value="Fixed Price">Fixed Price</option>
+                                        <option value="Remote">Remote</option>
+                                        <option value="Hourly Basis">Hourly Basis</option>
                                     </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="control-label">Location</label>
+                                    <input type="text" name="loc" class="form-control form-control-sm" value="<?php echo $cl['Loc'];?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="control-label">Experience</label>
+                                    <select type="text" name="Experience" class="form-control form-control-sm">
+                                        <option value="value="<?php echo $cl['Experience'];?>"">Select option</option>
+                                        <option value="0 - 1 Year">0 - 1 Years</option>
+                                        <option value="2 - 4 Years">2 - 3 Years</option>
+                                        <option value="4 - 5+ Years">4 - 5+ Years</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="control-label">Qualification</label>
+                                    <input type="text" name="qualification" class="form-control form-control-sm" value="<?php echo $cl['Qualification'];?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="control-label">Salary En TND</label>
+                                    <input type="text" name="Salary" class="form-control form-control-sm" value="<?php echo $cl['Salary'];?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="control-label">Date END</label>
+                                    <input type="date" name="date_end" class="form-control form-control-sm" value="<?php echo $cl['Date_end'];?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="control-label">Job Description</label>
+                                    <textarea type="text" name="Desc" class="form-control form-control-sm" ><?php echo $cl['description'];?></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="control-label">Responsibilities and Duties:</label>
+                                    <textarea type="text" name="RD" class="form-control form-control-sm" ><?php echo $cl['Responsibilities_Duties'];?></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="control-label">Required Experience, Skills and Qualifications:</label>
+                                    <textarea type="text" name="RESQ" class="form-control form-control-sm" ><?php echo $cl['RESQ'];?></textarea>
                                 </div>
                                 <br>
                                 <div class="input-box">
-                                    <center><button type="submit" name="ajout" class="btn btn-primary mr-2">Ajouter</button></center>
+                                    <center><button type="submit" name="updatejob" class="btn btn-primary mr-2">Update Job</button></center>
 
 
                                 </div>
@@ -272,7 +219,6 @@ if(isset($_POST['ajout'])){
 
         </div>
     </section><!-- End About Section -->
-
     <!-- ======= Footer ======= -->
     <footer id="footer">
         <div class="container">
@@ -284,6 +230,7 @@ if(isset($_POST['ajout'])){
                 <!-- You can delete the links only if you purchased the pro version. -->
                 <!-- Licensing information: https://bootstrapmade.com/license/ -->
                 <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/ -->
+                Designed by <a href="https://www.linkedin.com/in/wannes-chayeb-4a61501a1/">Love ♥</a>
             </div>
         </div>
     </footer><!-- End  Footer -->

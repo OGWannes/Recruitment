@@ -15,10 +15,15 @@ if (isset($_POST['submit'])) {
 
     // Use double quotes to interpolate variables inside the string
     $query = "INSERT INTO user (email,password,nom,prenom,role) VALUES ('$email','$hash','$nom','$prenom','$role')";
+    $res2 = "INSERT INTO profile (email) values ('$email')";
+    $res5 = "INSERT INTO experience (email) values ('$email')";
+
 
     $res = mysqli_query($con, $query);
+    $res3= mysqli_query($con, $res2);
+    $res6= mysqli_query($con, $res5);
 
-    if ($res) {
+    if ($res && $res3 && $res6) {
         echo "alert('Added Successfully, Welcome $nom')";
         echo "<script>location.replace('login.php')</script>";
     } else {
@@ -85,7 +90,7 @@ if (isset($_POST['submit'])) {
                                         <select name="role" class="form-control form-select" id="role">
                                             <option value="">Select an option</option>
                                             <option value="rh">Resource Humaine</option>
-                                            <option value="Con">Condidateur</option>
+                                            <option value="con">Condidateur</option>
                                         </select>
                                     </div>
 

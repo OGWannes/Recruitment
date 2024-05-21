@@ -15,14 +15,14 @@ if(isset($_SESSION['role'])){
 
 $users = new Admin();
 if(isset($_GET['deleteid'])){
-    $users->DeleteUser($_GET['deleteid'],$_GET['email']);
+    $users->DeleteUser($_GET['deleteid']);
+    echo "alert('User Deleted')";
+    header("location: home.php");
 }
 
-$allusers = $users->GetUsers();
-$listeU = [];
-while ($U = $allusers->fetch()){
-    $listeU[] = $U;
-
+if(isset($_POST['ajoutjob'])){
+    $users->AjoutJob($_POST);
+    header("location: ConsultJobs.php");
 }
 
 ?>
@@ -152,87 +152,82 @@ while ($U = $allusers->fetch()){
 </main><!-- End #main -->
 
 <main id="main">
-    <section id="consultall" class="consultall">
+    <!-- ======= About Section ======= -->
+    <section id="ajout" class="about">
         <div class="container">
-
             <div class="section-title">
-                <h2>Consulté</h2>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-7">
-
-                            <form action="" method="GET">
-                                <div class="input-group mb-3">
-                                    <input type="text" name="search" placeholder="Nom/Prenom/EMAIL" required value="<?php if(isset($_GET['search'])){echo $_GET['search']; } ?>" class="form-control" placeholder="Search data">
-                                    <button type="submit" class="btn btn-primary">Cherche</button>
+                <h2>Ajout Job</h2>
+                <form id="addemployee" class="clearfix" method="POST" action="">
+                    <strong><div class="section_subtitle left">Données job</div></strong>
+                    <form action="" id="manage_employee">
+                        <div class="row">
+                            <div class="col-md-6 border-right">
+                                <div class="form-group">
+                                    <label for="" class="control-label">Job Name</label>
+                                    <input type="text" name="job_name" class="form-control form-control-sm" >
                                 </div>
-                            </form>
+                                <div class="form-group">
+                                    <label for="" class="control-label">Employee Type</label>
+                                    <select type="text" name="Employee_Type" class="form-control form-control-sm" >
+                                        <option value="">Select option</option>
+                                        <option value="Full Time">Full Time</option>
+                                        <option value="Part Time">Part Time</option>
+                                        <option value="Freelancing">Freelancing</option>
+                                        <option value="Fixed Price">Fixed Price</option>
+                                        <option value="Remote">Remote</option>
+                                        <option value="Hourly Basis">Hourly Basis</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="control-label">Location</label>
+                                    <input type="text" name="loc" class="form-control form-control-sm" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="control-label">Experience</label>
+                                    <select type="text" name="Experience" class="form-control form-control-sm">
+                                        <option value="">Select option</option>
+                                        <option value="0 - 1 Year">0 - 1 Years</option>
+                                        <option value="2 - 4 Years">2 - 3 Years</option>
+                                        <option value="4 - 5+ Years">4 - 5+ Years</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="control-label">Qualification</label>
+                                    <input type="text" name="qualification" class="form-control form-control-sm" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="control-label">Salary En TND</label>
+                                    <input type="text" name="Salary" class="form-control form-control-sm" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="control-label">Date END</label>
+                                    <input type="date" name="date_end" class="form-control form-control-sm" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="control-label">Job Description</label>
+                                    <textarea type="text" name="Desc" class="form-control form-control-sm" ></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="control-label">Responsibilities and Duties:</label>
+                                    <textarea type="text" name="RD" class="form-control form-control-sm" ></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="control-label">Required Experience, Skills and Qualifications:</label>
+                                    <textarea type="text" name="RESQ" class="form-control form-control-sm" ></textarea>
+                                </div>
+                                <br>
+                                <div class="input-box">
+                                    <center><button type="submit" name="ajoutjob" class="btn btn-primary mr-2">Ajouter</button></center>
 
-                        </div>
-                    </div>
-                </div>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">id</th>
-                        <th scope="col">Prenom</th>
-                        <th scope="col">Nom</th>
-                        <th scope="col">E-mail</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    if (isset($_GET['search'])) {
-                        $filtervalues = $_GET['search'];
-                        $query = "SELECT * FROM user WHERE CONCAT (prenom,Nom,email) LIKE '%$filtervalues%' ";
-                        $query_run = mysqli_query($con, $query);
-                        if (mysqli_num_rows($query_run) > 0) {
-                            foreach ($query_run as $items) {
-                                ?>
-                                <tr>
-                                    <td><?= $items['id']; ?></td>
-                                    <td><?= $items['prenom']; ?></td>
-                                    <td><?= $items['nom']; ?></td>
-                                    <td><?= $items['email'] ?></td>
-                                    <td>
-                                        <button class="btn btn-primary"><?php echo '<a href="update.php?updateid='.$items['id'].'" class="text-light">Mise a jour</a>'?></button>
-                                        <button class="btn btn-danger"><?php echo '<a href="?deleteid='.$items['id'].'&email='.$items['email'].'"  class="text-light">Delete</a> '?></button>
-                                        </center></td>
-                                </tr>
-                                <?php
-                            }
-                        } else {
-                            ?>
-                            <?php
-                        }
-                    }else {
 
-                        foreach ($listeU as $c) {
-                            echo "<tr>
-        <td>{$c['id']}</td>
-        <td>{$c['prenom']}</td>
-        <td>{$c['nom']}</td>
-        <td>{$c['email']}</td>
-        <td><button class='btn btn-primary'><a href='update.php?updateid={$c['id']}' class='text-light'>Mise a jour</a></button>
-        <button class='btn btn-danger'><a href='?deleteid={$c['id']}&email={$c['email']}'  class='text-light'>Delete</a></button> 
-        </td>
-        </tr>";
-                        }
+                                </div>
 
-                    }?>
-                    </tbody>
-                </table>
-
+                    </form>
 
             </div>
 
-
         </div>
-        </div>
-
-        </div>
-    </section><!-- End Resume Section -->
+    </section><!-- End About Section -->
 
     <!-- ======= Footer ======= -->
     <footer id="footer">

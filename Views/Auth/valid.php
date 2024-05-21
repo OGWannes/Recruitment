@@ -15,27 +15,23 @@ if (isset($_POST['submit'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $query = "SELECT * FROM user WHERE email = '$email' AND password ='$password'";
+    $newpass = md5($password);
+
+    $query = "SELECT * FROM user WHERE email = '$email' AND password ='$newpass'";
 
     $res = mysqli_query($con, $query);
-    echo $password;
-    echo $_POST['password'];
 
     if (mysqli_num_rows($res) > 0) {
 
 
         while ($row = mysqli_fetch_assoc($res)) {
-
-           /* if (password_verify($password,$row["password"])){
-                echo "<script>alert('Logged in successfully')</script>";
-            }else{
-                echo "<script>alert('404 Ereur')</script>";
-            }*/
-            if ($row["role"] == "Con"){
+            if ($row["role"] == "con"){
                 $_SESSION["prenom"] = $row["prenom"];
+                $_SESSION["password"] = $row["password"];
                 $_SESSION["email"] = $row["email"];
                 $_SESSION["role"] = $row["role"];
                 $id = $row["id"];
+                $_SESSION["id"] = $row["id"];
                 header("location: ../Condidate/index.php?iduser=$id");
                 echo "<script>alert('Logged in successfully')</script>";
 
@@ -44,6 +40,7 @@ if (isset($_POST['submit'])) {
                 $_SESSION["email"] = $row["email"];
                 $_SESSION["role"] = $row["role"];
                 $id = $row["id"];
+                $_SESSION["id"] = $row["id"];
                 echo "<script>location.replace('../Condidate/index.php?iduser=$id')</script>";
                 echo "<script>alert('Logged in successfully')</script>";
 
@@ -66,7 +63,7 @@ if (isset($_POST['submit'])) {
 
         }
     }else{
-        echo "<script>alert('Woops! Email or Password incorrect')</script>";
+        echo "<script>alert('Woops!')</script>";
     }
 
 

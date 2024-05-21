@@ -13,14 +13,14 @@ if(isset($_SESSION['role'])){
     header('location: ../Auth/login.php');
 }
 
-$users = new Admin();
+$contacts = new Admin();
 if(isset($_GET['deleteid'])){
-    $users->DeleteUser($_GET['deleteid'],$_GET['email']);
+    $contacts->DeleteContact($_GET['deleteid']);
 }
 
-$allusers = $users->GetUsers();
+$allcontacts = $contacts->GetContacts();
 $listeU = [];
-while ($U = $allusers->fetch()){
+while ($U = $allcontacts->fetch()){
     $listeU[] = $U;
 
 }
@@ -163,7 +163,7 @@ while ($U = $allusers->fetch()){
 
                             <form action="" method="GET">
                                 <div class="input-group mb-3">
-                                    <input type="text" name="search" placeholder="Nom/Prenom/EMAIL" required value="<?php if(isset($_GET['search'])){echo $_GET['search']; } ?>" class="form-control" placeholder="Search data">
+                                    <input type="text" name="search" placeholder="status" required value="<?php if(isset($_GET['search'])){echo $_GET['search']; } ?>" class="form-control" placeholder="Search data">
                                     <button type="submit" class="btn btn-primary">Cherche</button>
                                 </div>
                             </form>
@@ -178,6 +178,7 @@ while ($U = $allusers->fetch()){
                         <th scope="col">Prenom</th>
                         <th scope="col">Nom</th>
                         <th scope="col">E-mail</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
                     </thead>
@@ -185,19 +186,20 @@ while ($U = $allusers->fetch()){
                     <?php
                     if (isset($_GET['search'])) {
                         $filtervalues = $_GET['search'];
-                        $query = "SELECT * FROM user WHERE CONCAT (prenom,Nom,email) LIKE '%$filtervalues%' ";
+                        $query = "SELECT * FROM contact WHERE CONCAT (name,email,subject,status) LIKE '%$filtervalues%' ";
                         $query_run = mysqli_query($con, $query);
                         if (mysqli_num_rows($query_run) > 0) {
                             foreach ($query_run as $items) {
                                 ?>
                                 <tr>
                                     <td><?= $items['id']; ?></td>
-                                    <td><?= $items['prenom']; ?></td>
-                                    <td><?= $items['nom']; ?></td>
-                                    <td><?= $items['email'] ?></td>
+                                    <td><?= $items['name']; ?></td>
+                                    <td><?= $items['email']; ?></td>
+                                    <td><?= $items['subject'] ?></td>
+                                    <td><?= $items['status'] ?></td>
                                     <td>
-                                        <button class="btn btn-primary"><?php echo '<a href="update.php?updateid='.$items['id'].'" class="text-light">Mise a jour</a>'?></button>
-                                        <button class="btn btn-danger"><?php echo '<a href="?deleteid='.$items['id'].'&email='.$items['email'].'"  class="text-light">Delete</a> '?></button>
+                                        <button class="btn btn-primary"><?php echo '<a href="UpdateContacts.php?updateid='.$items['id'].'" class="text-light">Mise a jour</a>'?></button>
+                                        <button class="btn btn-danger"><?php echo '<a href="?deleteid='.$items['id'].'"  class="text-light">Delete</a> '?></button>
                                         </center></td>
                                 </tr>
                                 <?php
@@ -211,11 +213,12 @@ while ($U = $allusers->fetch()){
                         foreach ($listeU as $c) {
                             echo "<tr>
         <td>{$c['id']}</td>
-        <td>{$c['prenom']}</td>
-        <td>{$c['nom']}</td>
+        <td>{$c['name']}</td>
         <td>{$c['email']}</td>
-        <td><button class='btn btn-primary'><a href='update.php?updateid={$c['id']}' class='text-light'>Mise a jour</a></button>
-        <button class='btn btn-danger'><a href='?deleteid={$c['id']}&email={$c['email']}'  class='text-light'>Delete</a></button> 
+        <td>{$c['subject']}</td>
+        <td>{$c['status']}</td>
+        <td><button class='btn btn-primary'><a href='UpdateContacts.php?updateid={$c['id']}' class='text-light'>Mise a jour</a></button>
+        <button class='btn btn-danger'><a href='?deleteid={$c['id']}'  class='text-light'>Delete</a></button> 
         </td>
         </tr>";
                         }

@@ -68,7 +68,7 @@
                             </button>
                             <div class="dropdown-menu dd-menu dropdown-menu-end bg-white rounded shadow border-0 mt-3">
                                 <a href="candidate-profile.html" class="dropdown-item fw-medium fs-6"><i data-feather="user" class="fea icon-sm me-2 align-middle"></i>Profile</a>
-                                <a href="candidate-profile-setting.php" class="dropdown-item fw-medium fs-6"><i data-feather="settings" class="fea icon-sm me-2 align-middle"></i>Settings</a>
+                                <a href="Views/Condidate/candidate-profile-setting.php" class="dropdown-item fw-medium fs-6"><i data-feather="settings" class="fea icon-sm me-2 align-middle"></i>Settings</a>
                                 <div class="dropdown-divider border-top"></div>
                                 <a href="lock-screen.html" class="dropdown-item fw-medium fs-6"><i data-feather="lock" class="fea icon-sm me-2 align-middle"></i>Lockscreen</a>
                                 <a href="Views/Auth/login.php" class="dropdown-item fw-medium fs-6"><i data-feather="log-out" class="fea icon-sm me-2 align-middle"></i>Logout</a>
@@ -99,7 +99,7 @@
                                         <li><a href="job-grid-one.html" class="sub-menu-item">Job Grid One</a></li>
                                         <li><a href="job-grid-two.html" class="sub-menu-item">Job Grid Two</a></li>
                                         <li><a href="job-grid-three.html" class="sub-menu-item">Job Grid Three</a></li>
-                                        <li><a href="job-grid-four.html" class="sub-menu-item">Job Grid Four </a></li>
+                                        <li><a href="Views/Condidate/job-grid-four.php" class="sub-menu-item">Job Grid Four </a></li>
                                     </ul>  
                                 </li>
 
@@ -115,12 +115,12 @@
                                     <a href="javascript:void(0)"> Job Detail </a><span class="submenu-arrow"></span>
                                     <ul class="submenu">
                                         <li><a href="job-detail-one.html" class="sub-menu-item">Job Detail One</a></li>
-                                        <li><a href="job-detail-two.html" class="sub-menu-item">Job Detail Two</a></li>
+                                        <li><a href="Views/Condidate/job-detail-two.php" class="sub-menu-item">Job Detail Two</a></li>
                                         <li><a href="job-detail-three.html" class="sub-menu-item">Job Detail Three</a></li>
                                     </ul>  
                                 </li>
                 
-                                <li><a href="job-apply.html" class="sub-menu-item">Job Apply</a></li>
+                                <li><a href="Views/Condidate/job-apply.php" class="sub-menu-item">Job Apply</a></li>
                 
                                 <li><a href="job-post.html" class="sub-menu-item">Job Post </a></li>
                 
@@ -141,7 +141,7 @@
                             <ul class="submenu">
                                 <li><a href="candidates.html" class="sub-menu-item">Candidates</a></li>
                                 <li><a href="candidate-profile.html" class="sub-menu-item">Candidate Profile</a></li>
-                                <li><a href="candidate-profile-setting.php" class="sub-menu-item">Profile Setting</a></li>
+                                <li><a href="Views/Condidate/candidate-profile-setting.php" class="sub-menu-item">Profile Setting</a></li>
                             </ul>
                         </li>
                 
@@ -196,7 +196,7 @@
                             </ul>
                         </li>
                 
-                        <li><a href="contactus.html" class="sub-menu-item">Contact Us</a></li>
+                        <li><a href="Views/Condidate/contactus.php" class="sub-menu-item">Contact Us</a></li>
                     </ul><!--end navigation menu-->
                 </div><!--end navigation-->
             </div>
@@ -222,7 +222,7 @@
                                     </div>
                                 </div>
 
-                                <a href="candidate-profile-setting.php" class="btn btn-sm btn-icon btn-pills btn-soft-primary"><i data-feather="settings" class="icons"></i></a>
+                                <a href="Views/Condidate/candidate-profile-setting.php" class="btn btn-sm btn-icon btn-pills btn-soft-primary"><i data-feather="settings" class="icons"></i></a>
                             </div>
                         </div>
                     </div><!--end col-->
@@ -474,7 +474,7 @@
                                 
                                 <div class="mt-3">
                                     <a href="candidate-profile.html" class="btn btn-sm btn-primary me-1">View Profile</a>
-                                    <a href="contactus.html" class="btn btn-sm btn-icon btn-soft-primary"><i data-feather="message-circle" class="icons"></i></a>
+                                    <a href="Views/Condidate/contactus.php" class="btn btn-sm btn-icon btn-soft-primary"><i data-feather="message-circle" class="icons"></i></a>
                                 </div>
 
                                 <a href="javascript:void(0)" class="like"><i class="mdi mdi-heart align-middle fs-4"></i></a>
@@ -511,7 +511,7 @@
                                 
                                 <div class="mt-3">
                                     <a href="candidate-profile.html" class="btn btn-sm btn-primary me-1">View Profile</a>
-                                    <a href="contactus.html" class="btn btn-sm btn-icon btn-soft-primary"><i data-feather="message-circle" class="icons"></i></a>
+                                    <a href="Views/Condidate/contactus.php" class="btn btn-sm btn-icon btn-soft-primary"><i data-feather="message-circle" class="icons"></i></a>
                                 </div>
 
                                 <a href="javascript:void(0)" class="like"><i class="mdi mdi-heart align-middle fs-4"></i></a>
@@ -549,7 +549,7 @@
                                 
                                 <div class="mt-3">
                                     <a href="candidate-profile.html" class="btn btn-sm btn-primary me-1">View Profile</a>
-                                    <a href="contactus.html" class="btn btn-sm btn-icon btn-soft-primary"><i data-feather="message-circle" class="icons"></i></a>
+                                    <a href="Views/Condidate/contactus.php" class="btn btn-sm btn-icon btn-soft-primary"><i data-feather="message-circle" class="icons"></i></a>
                                 </div>
 
                                 <a href="javascript:void(0)" class="like"><i class="mdi mdi-heart align-middle fs-4"></i></a>
@@ -586,7 +586,7 @@
                                 
                                 <div class="mt-3">
                                     <a href="candidate-profile.html" class="btn btn-sm btn-primary me-1">View Profile</a>
-                                    <a href="contactus.html" class="btn btn-sm btn-icon btn-soft-primary"><i data-feather="message-circle" class="icons"></i></a>
+                                    <a href="Views/Condidate/contactus.php" class="btn btn-sm btn-icon btn-soft-primary"><i data-feather="message-circle" class="icons"></i></a>
                                 </div>
 
                                 <a href="javascript:void(0)" class="like"><i class="mdi mdi-heart align-middle fs-4"></i></a>
@@ -617,8 +617,8 @@
 
                         <div class="col-md-5 mt-4 mt-sm-0">
                             <div class="text-md-end ms-5 ms-sm-0">
-                                <a href="job-apply.html" class="btn btn-primary me-1 my-1">Apply Now</a>
-                                <a href="contactus.html" class="btn btn-soft-primary my-1">Contact Us</a>
+                                <a href="Views/Condidate/job-apply.php" class="btn btn-primary me-1 my-1">Apply Now</a>
+                                <a href="Views/Condidate/contactus.php" class="btn btn-soft-primary my-1">Contact Us</a>
                             </div>
                         </div><!--end col-->
                     </div><!--end row-->

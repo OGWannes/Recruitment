@@ -111,10 +111,16 @@ font-size: 16px;
       </div>
 
       <nav id="navbar" class="nav-menu navbar">
-        <ul>
-          <li><a href="home.php" class="nav-link scrollto"><i class="bx bx-home"></i> <span>Acceuil</span></a></li>
-          <li><a href="#Update" class="nav-link scrollto"><i class="bx bx-user"></i> <span>Mise a jour utilisateur</span></a></li>
-        </ul>
+          <ul>
+              <li><a href="home.php" class="nav-link scrollto"><i class="bx bx-home"></i> <span>Accuiell</span></a></li>
+              <li><a href="home.php" class="nav-link scrollto"><i class="bx bx-user"></i> <span>Ajouter Utilisateur</span></a></li>
+              <li><a href="Consult.php" class="nav-link scrollto"><i class="bx bx-user"></i> <span>Consulter Utilisateurs</span></a></li>
+              <li><a href="Contacts.php" class="nav-link scrollto"><i class="bx bx-archive"></i> <span>Consulter Contacts</span></a></li>
+              <li><a href="CreateJob.php" class="nav-link scrollto"><i class="bx bx-user-check"></i> <span>Ajouter Job</span></a></li>
+              <li><a href="ConsultJobs.php" class="nav-link scrollto"><i class="bx bx-user-check"></i> <span>Consult Jobs</span></a></li>
+
+
+          </ul>
       </nav><!-- .nav-menu -->
     </div>
   </header><!-- End Header -->
@@ -130,7 +136,7 @@ font-size: 16px;
 			  <?php echo date("h:i:s");?> 
           <ol>
 
-            <li><strong><button type="button" class="button1"><a href="logout.php" class="text-light">Déconnecter</a></button></strong></li>
+            <li><strong><button type="button" class="button1"><a href="../Auth/logout.php" class="text-light">Déconnecter</a></button></strong></li>
           </ol>
         </div>
 
@@ -152,8 +158,6 @@ font-size: 16px;
 							<input type="email" name="email" class="form-control form-control-sm" value="<?php echo $cl['email'];?>">
                             <label for="" class="control-label">Password</label>
 							<input type="password" name="password" class="form-control form-control-sm" value="<?php echo $cl['password'];?>">
-							<label for="" class="control-label">Date Naissance</label>
-							<input type="text" name="DateNais" class="form-control form-control-sm" value="<?php echo $cl['DateNais'];?>">
 
 							<label for="" class="control-label">Role</label>
                             <input type="text" name="role" class="form-control form-control-sm" value="<?php echo $cl['role'];?>">
@@ -164,13 +168,7 @@ font-size: 16px;
 							<label for="" class="control-label">Nom</label>
 							<input type="text" name="nom" class="form-control form-control-sm" value="<?php echo $cl['nom'];?>">
 
-
-							<label for="" class="control-label">Teléphone</label>
-							<input type="text" name="tel" class="form-control form-control-sm" value="<?php echo $cl['tel'];?>">
-							<label for="" class="control-label">Adresse</label>
-							<input type="text" name="addresse" class="form-control form-control-sm" value="<?php echo $cl['addresse'];?>">
-                        
-						<center><button type="submit" name="update" class="btn btn-primary mr-2">Update</button></center>
+						<center><button type="submit" name="update" class="btn btn-primary mr-2">Update Utilisateur</button></center>
 						
 
 					</div>

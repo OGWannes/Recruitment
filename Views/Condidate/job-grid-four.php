@@ -1,39 +1,39 @@
 <?php
 
-include_once "../Auth/valid.php";
-include "../../Classes/User.php";
+include_once '../Auth/valid.php';
+include_once '../../Classes/Job.php';
 
-if(isset($_SESSION['role'])) {
-    if ($_SESSION['role'] != 'con') {
+
+if(isset($_SESSION['role'])){
+    if($_SESSION['role'] != 'con'){
         header('location: ../Auth/login.php');
 
     }
+
 }
 
+$job = new Job();
 
-$user = new User();
+$alljobs = $job->GetJobs();
+$liste = [];
+while ($J = $alljobs->fetch()){
+    $liste[] = $J;
 
-if(isset($_SESSION['id'])){
-    $cl = $user->GetUser($_SESSION['id']);
 }
 
-if(isset($_SESSION['email'])){
-    $profile = $user->GetProfile($_SESSION['email']);
-}
+$fullTimeCount = $job->GetJobCountByType('Full Time');
+$partTimeCount = $job->GetJobCountByType('Part Time');
+$freelancingCount = $job->GetJobCountByType('Freelancing');
+$fixedPriceCount = $job->GetJobCountByType('Fixed Price');
+$remoteCount = $job->GetJobCountByType('Remote');
+$hourlyBasisCount = $job->GetJobCountByType('Hourly Basis');
 
-if(isset($_SESSION['email'])){
-    $experience = $user->GetExperience($_SESSION['email']);
-}
-
-if(isset($_POST['send'])){
-$user->AjouterMessage($_POST);
-}
 
 ?>
 <!doctype html>
 <html lang="en">
 	
-<!-- Mirrored from shreethemes.in/jobnova/layouts/candidate-profile.php by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Apr 2024 13:09:19 GMT -->
+<!-- Mirrored from shreethemes.in/jobnova/layouts/job-grid-four.php by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Apr 2024 13:09:24 GMT -->
 <head>
 		<meta charset="UTF-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -58,8 +58,11 @@ $user->AjouterMessage($_POST);
         <header id="topnav" class="defaultscroll sticky">
             <div class="container">
                 <a class="logo" href="index.php">
-                    <img src="../images/logo-dark.png" class="logo-light-mode" alt="">
-                    <img src="../images/logo-light.png" class="logo-dark-mode" alt="">
+                    <span class="logo-light-mode">
+                        <img src="Views/images/logo-dark.png" class="l-dark" alt="">
+                        <img src="Views/images/logo-light.png" class="l-light" alt="">
+                    </span>
+                    <img src="Views/images/logo-light.png" class="logo-dark-mode" alt="">
                 </a>
 
                 <div class="menu-extras">
@@ -99,7 +102,7 @@ $user->AjouterMessage($_POST);
                                 <img src="../images/team/01.jpg" class="img-fluid rounded-pill" alt="">
                             </button>
                             <div class="dropdown-menu dd-menu dropdown-menu-end bg-white rounded shadow border-0 mt-3">
-                                <a href="candidate-profile.html" class="dropdown-item fw-medium fs-6"><i data-feather="user" class="fea icon-sm me-2 align-middle"></i>Profile</a>
+                                <a href="candidate-profile.php" class="dropdown-item fw-medium fs-6"><i data-feather="user" class="fea icon-sm me-2 align-middle"></i>Profile</a>
                                 <a href="candidate-profile-setting.php" class="dropdown-item fw-medium fs-6"><i data-feather="settings" class="fea icon-sm me-2 align-middle"></i>Settings</a>
                                 <div class="dropdown-divider border-top"></div>
                                 <a href="../../lock-screen.html" class="dropdown-item fw-medium fs-6"><i data-feather="lock" class="fea icon-sm me-2 align-middle"></i>Lockscreen</a>
@@ -111,7 +114,7 @@ $user->AjouterMessage($_POST);
         
                 <div id="navigation">
                     <!-- Navigation Menu-->   
-                    <ul class="navigation-menu nav-right">
+                    <ul class="navigation-menu nav-right nav-light">
                         <li class="has-submenu parent-menu-item">
                             <a href="javascript:void(0)">Home</a><span class="menu-arrow"></span>
                             <ul class="submenu">
@@ -131,7 +134,7 @@ $user->AjouterMessage($_POST);
                                         <li><a href="../../job-grid-one.html" class="sub-menu-item">Job Grid One</a></li>
                                         <li><a href="../../job-grid-two.html" class="sub-menu-item">Job Grid Two</a></li>
                                         <li><a href="../../job-grid-three.html" class="sub-menu-item">Job Grid Three</a></li>
-                                        <li><a href="job-grid-four.php" class="sub-menu-item">Job Grid Four </a></li>
+                                        <li><a href="job-grid-four.html" class="sub-menu-item">Job Grid Four </a></li>
                                     </ul>  
                                 </li>
 
@@ -172,7 +175,7 @@ $user->AjouterMessage($_POST);
                             <a href="javascript:void(0)">Candidates</a><span class="menu-arrow"></span>
                             <ul class="submenu">
                                 <li><a href="../../candidates.html" class="sub-menu-item">Candidates</a></li>
-                                <li><a href="candidate-profile.html" class="sub-menu-item">Candidate Profile</a></li>
+                                <li><a href="candidate-profile.php" class="sub-menu-item">Candidate Profile</a></li>
                                 <li><a href="candidate-profile-setting.php" class="sub-menu-item">Profile Setting</a></li>
                             </ul>
                         </li>
@@ -235,220 +238,230 @@ $user->AjouterMessage($_POST);
         </header>
         <!-- Navbar End -->
 
+        <!-- Hero Start -->
+        <section class="bg-half-170 d-table w-100" style="background: url('../images/hero/bg.jpg');">
+            <div class="bg-overlay bg-gradient-overlay"></div>
+            <div class="container">
+                <div class="row mt-5 justify-content-center">
+                    <div class="col-12">
+                        <div class="title-heading text-center">
+                            <h5 class="heading fw-semibold mb-0 sub-heading text-white title-dark">Available Jobs</h5>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end container-->
+        </section><!--end section-->
+        <!-- Hero End -->
+
         <!-- Start -->
         <section class="section">
             <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="position-relative">
-                            <div class="candidate-cover">
-                                <img src="../images/hero/bg5.jpg" class="img-fluid rounded shadow" alt="">
-                            </div>
-                            <div class="candidate-profile d-flex align-items-end justify-content-between mx-2">
-                                <div class="d-flex align-items-end">
-                                    <img src="../images/team/01.jpg" class="rounded-pill shadow border border-3 avatar avatar-medium" alt="">
-
-                                    <div class="ms-2">
-                                        <h5 class="mb-0"><?php echo $cl['prenom']; ?><?php echo " ",$cl['nom']; ?></h5>
-                                        <p class="text-muted mb-0"><?php echo $profile['occup']; ?></p>
-                                    </div>
-                                </div>
-
-                                <a href="candidate-profile-setting.php" class="btn btn-sm btn-icon btn-pills btn-soft-primary"><i data-feather="settings" class="icons"></i></a>
-                            </div>
-                        </div>
-                    </div><!--end col-->
-                </div><!--end row-->
-            </div><!--end container-->
-
-            <div class="container mt-4">
                 <div class="row g-4">
-                    <div class="col-lg-8 col-md-7 col-12">
-                        <h5 class="mb-4">Introduction:</h5>
+                    <div class="col-lg-50 col-md-12 col-12">
+                        <div class="card bg-white p-4 rounded shadow sticky-bar">
+                            <form method="POST">
+                            <!-- Categories -->
+                            <div class="mt-4">
+                                <h6 class="mb-0">Categories</h6>
+                                <select class="form-select form-control border mt-2" aria-label="Default select example">
+                                    <?php foreach ($liste as $c) {
+                                        echo "<option value='{$c['job_name']}'>{$c['job_name']}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <!-- Categories -->
+    
+                            <!-- Location -->
+                            <div class="mt-4">
+                                <h6 class="mb-0">Location</h6>
+    
+                                <select class="form-select form-control border mt-2" aria-label="Default select example">
+                                    <?php foreach ($liste as $c) {
+                                        echo "<option value='{$c['loc']}'>{$c['Loc']}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <!-- Location -->
 
-                        <p class="text-muted"><?php echo $profile['intro']; ?> </p>
+                            <!-- Type Start -->
+                            <div class="mt-4">
+                                <h6>Job Types</h6>
 
-                        <h5 class="mt-4">Skills:</h5>
-
-                        <div class="row">
-                            <div class="col-lg-6 col-12">
-                                <div class="progress-box mt-4">
-                                    <h6 class="font-weight-normal">HTML</h6>
-                                    <div class="progress">
-                                        <div class="progress-bar position-relative bg-primary" style="width:84%;">
-                                            <div class="progress-value d-block text-dark h6">84%</div>
-                                        </div>
-                                    </div>
-                                </div><!--end process box-->
-                                <div class="progress-box mt-4">
-                                    <h6 class="font-weight-normal">CSS</h6>
-                                    <div class="progress">
-                                        <div class="progress-bar position-relative bg-primary" style="width:75%;">
-                                            <div class="progress-value d-block text-dark h6">75%</div>
-                                        </div>
-                                    </div>
-                                </div><!--end process box-->
-                                <div class="progress-box mt-4">
-                                    <h6 class="font-weight-normal">JQuery</h6>
-                                    <div class="progress">
-                                        <div class="progress-bar position-relative bg-primary" style="width:79%;">
-                                            <div class="progress-value d-block text-dark h6">79%</div>
-                                        </div>
-                                    </div>
-                                </div><!--end process box-->
-                            </div><!--end col-->
-
-                            <div class="col-lg-6 col-12">
-                                <div class="progress-box mt-4">
-                                    <h6 class="font-weight-normal">WordPress</h6>
-                                    <div class="progress">
-                                        <div class="progress-bar position-relative bg-primary" style="width:79%;">
-                                            <div class="progress-value d-block text-dark h6">79%</div>
-                                        </div>
-                                    </div>
-                                </div><!--end process box-->
-                                <div class="progress-box mt-4">
-                                    <h6 class="font-weight-normal">Figma</h6>
-                                    <div class="progress">
-                                        <div class="progress-bar position-relative bg-primary" style="width:85%;">
-                                            <div class="progress-value d-block text-dark h6">85%</div>
-                                        </div>
-                                    </div>
-                                </div><!--end process box-->
-                                <div class="progress-box mt-4">
-                                    <h6 class="font-weight-normal">Illustration</h6>
-                                    <div class="progress">
-                                        <div class="progress-bar position-relative bg-primary" style="width:65%;">
-                                            <div class="progress-value d-block text-dark h6">65%</div>
-                                        </div>
-                                    </div>
-                                </div><!--end process box-->
-                            </div><!--end col-->
-                        </div><!--end row-->
-
-                        <h5 class="mt-4">Experience:</h5>
-
-                        <div class="row">
-                            <div class="col-12 mt-4">
-                                <div class="d-flex">
-                                    <div class="text-center">
-                                        <img src="../images/company/linkedin.png" class="avatar avatar-small bg-white shadow p-2 rounded" alt="">
-                                        <h6 class="text-muted mt-2 mb-0"><?php echo $experience['date']; ?> </h6>
+                                <div class="d-flex justify-content-between mt-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<?php echo $fullTimeCount ?>" id="Full">
+                                        <label class="form-check-label" for="Full">Full Time</label>
                                     </div>
 
-                                    <div class="ms-3">
-                                        <h6 class="mb-0"><?php echo $experience['job_name']; ?></h6>
-                                        <p class="text-muted"><?php echo $experience['location']; ?></p>
-                                        <p class="text-muted mb-0"><?php echo $experience['description']; ?>.</p>
-                                    </div>
+                                    <span class="badge bg-soft-primary rounded-pill"><?php echo $fullTimeCount ?></span>
                                 </div>
-                            </div><!--end col-->
-                        </div><!--end row-->
 
-                        <div class="p-4 rounded shadow mt-4">
-                            <h5>Get in touch !</h5>
-                            <form class="mt-4" method="POST">
-                                <p class="mb-0" id="error-msg"></p>
-                                <div id="simple-msg"></div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-semibold">Your Name <span class="text-danger">*</span></label>
-                                            <input name="name" id="name" type="text" class="form-control" value="<?php echo $cl['prenom']," ",$cl['nom']?>">
-                                        </div>
+                                <div class="d-flex justify-content-between mt-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<?php echo $partTimeCount ?>" id="Part">
+                                        <label class="form-check-label" for="Part">Part Time</label>
                                     </div>
-    
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-semibold">Your Email <span class="text-danger">*</span></label>
-                                            <input name="email" id="email" type="email" class="form-control" value="<?php echo $cl['email']?>">
-                                        </div> 
-                                    </div><!--end col-->
-    
-                                    <div class="col-12">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-semibold">Subject</label>
-                                            <input name="subject" id="subject" class="form-control" placeholder="Subject :">
-                                        </div>
-                                    </div><!--end col-->
-    
-                                    <div class="col-12">
-                                        <div class="mb-3">
-                                            <label class="form-label fw-semibold">Comments <span class="text-danger">*</span></label>
-                                            <textarea name="message" id="message" rows="4" class="form-control" placeholder="Message :"></textarea>
-                                        </div>
-                                    </div>
+
+                                    <span class="badge bg-soft-primary rounded-pill"><?php echo $partTimeCount ?></span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="d-grid">
-                                            <button type="submit" name="send" class="btn btn-primary">Send Message</button>
-                                        </div>
-                                    </div><!--end col-->
-                                </div><!--end row-->
+
+                                <div class="d-flex justify-content-between mt-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<?php echo $freelancingCount ?>" id="Freelancer">
+                                        <label class="form-check-label" for="Freelancer">Freelancing</label>
+                                    </div>
+
+                                    <span class="badge bg-soft-primary rounded-pill"><?php echo $freelancingCount ?></span>
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<?php echo $fixedPriceCount ?>" id="Fixed">
+                                        <label class="form-check-label" for="Fixed">Fixed Price</label>
+                                    </div>
+
+                                    <span class="badge bg-soft-primary rounded-pill"><?php echo $fixedPriceCount ?></span>
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<?php echo $remoteCount ?>" id="Remote">
+                                        <label class="form-check-label" for="Remote">Remote</label>
+                                    </div>
+
+                                    <span class="badge bg-soft-primary rounded-pill"><?php echo $remoteCount ?></span>
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<?php echo $hourlyBasisCount ?>" id="Hourly">
+                                        <label class="form-check-label" for="Hourly">Hourly Basis</label>
+                                    </div>
+
+                                    <span class="badge bg-soft-primary rounded-pill"><?php echo $hourlyBasisCount ?></span>
+                                </div>
+                            </div>
+                            <!-- Type End -->
+                            <div class="mt-4">
+                                <button type="submit" name="filter" class="btn btn-primary w-100">Apply Filter</button>
+                            </div>
                             </form>
                         </div>
                     </div><!--end col-->
+                    <?php foreach ($liste as $c) {
+                        $timestamp = strtotime($c['Date_Post']);
+                        $difference = time() - $timestamp;
+                        $days = floor($difference / (60 * 60 * 24));
+                        echo "
+                    <div class='col-lg-6 col-12'>
+                        <div class='job-post rounded shadow bg-white'>
+                            <div class='p-4'>
+                                <a href='job-detail-two.php?jobid={$c['id']}' class='text-dark title h5'>{$c['job_name']}</a>
+
+                                <p class='text-muted d-flex align-items-center small mt-3'><i data-feather='clock' class='fea icon-sm text-primary me-1'></i>Posted $days Days ago</p>
+
+                                <ul class='list-unstyled d-flex justify-content-between align-items-center mb-0 mt-3'>
+                                    <li class='list-inline-item'><span class='badge bg-soft-primary'>{$c['Employee_Type']}</span></li>
+                                    <li class='list-inline-item'><span class='text-muted d-flex align-items-center small'><i data-feather='dollar-sign' class='fea icon-sm text-primary me-1'></i>{$c['Salary']}TND</span></li>
+                                </ul>
+                            </div>
+                            <div class='d-flex align-items-center p-4 border-top'>
+                                <img src='../images/company/google-logo.png' class='avatar avatar-small rounded shadow p-3 bg-white' alt=''>
+                                <div class='ms-3'>
+                                    <a href='../../employer-profile.html' class='h5 company text-dark'>TEKUP</a>
+                                    <span class='text-muted d-flex align-items-center mt-1'><i data-feather='map-pin' class='fea icon-sm me-1'></i>{$c['Loc']}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>";
+                    } ?>
+                </div>
+            </div>
+            <!--end container-->
+
+
+
+            <div class="container mt-100 mt-60">
+                <div class="row justify-content-center mb-4 pb-2">
+                    <div class="col-12">
+                        <div class="section-title text-center">
+                            <h4 class="title mb-3">Here's why you'll love it TEK-JOB</h4>
+                            <p class="text-muted para-desc mx-auto mb-0">Search all the open positions on the web. Get your own personalized salary estimate. Read reviews on over 30000+ companies worldwide.</p>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+
+                <div class="row">
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
+                        <div class="position-relative features text-center p-4 rounded shadow bg-white">
+                            <div class="feature-icon bg-soft-primary rounded shadow mx-auto position-relative overflow-hidden d-flex justify-content-center align-items-center">
+                                <i data-feather="phone" class="fea icon-ex-md"></i>
+                            </div>
+    
+                            <div class="mt-4">
+                                <a href="#" class="title h5 text-dark">24/7 Support</a>
+                                <p class="text-muted mt-3 mb-0">Many desktop publishing now use and a search for job.</p>
+                                <div class="mt-3">
+                                    <a href="#" class="btn btn-link primary text-dark">Read More <i class="mdi mdi-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end col-->
                     
-                    <div class="col-lg-4 col-md-5 col-12">
-                        <div class="card bg-light p-4 rounded shadow sticky-bar">
-                            <h5 class="mb-0">Personal Detail:</h5>
-                            <div class="mt-3">
-                                <div class="d-flex align-items-center justify-content-between mt-3">
-                                    <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="mail" class="fea icon-sm me-2"></i> Email:</span>
-                                    <span class="fw-medium"><?php echo $cl['email']?></span>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
+                        <div class="position-relative features text-center p-4 rounded shadow bg-white">
+                            <div class="feature-icon bg-soft-primary rounded shadow mx-auto position-relative overflow-hidden d-flex justify-content-center align-items-center">
+                                <i data-feather="cpu" class="fea icon-ex-md"></i>
+                            </div>
+    
+                            <div class="mt-4">
+                                <a href="#" class="title h5 text-dark">Tech & Startup Jobs</a>
+                                <p class="text-muted mt-3 mb-0">Many desktop publishing now use and a search for job.</p>
+                                <div class="mt-3">
+                                    <a href="#" class="btn btn-link primary text-dark">Read More <i class="mdi mdi-arrow-right"></i></a>
                                 </div>
-
-                                <div class="d-flex align-items-center justify-content-between mt-3">
-                                    <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="gift" class="fea icon-sm me-2"></i> D.O.B.:</span>
-                                    <span class="fw-medium"><?php echo $profile['intro']; ?></span>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+                    
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
+                        <div class="position-relative features text-center p-4 rounded shadow bg-white">
+                            <div class="feature-icon bg-soft-primary rounded shadow mx-auto position-relative overflow-hidden d-flex justify-content-center align-items-center">
+                                <i data-feather="activity" class="fea icon-ex-md"></i>
+                            </div>
+    
+                            <div class="mt-4">
+                                <a href="#" class="title h5 text-dark">Quick & Easy</a>
+                                <p class="text-muted mt-3 mb-0">Many desktop publishing now use and a search for job.</p>
+                                <div class="mt-3">
+                                    <a href="#" class="btn btn-link primary text-dark">Read More <i class="mdi mdi-arrow-right"></i></a>
                                 </div>
-
-                                <div class="d-flex align-items-center justify-content-between mt-3">
-                                    <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="home" class="fea icon-sm me-2"></i> Address:</span>
-                                    <span class="fw-medium"><?php echo $profile['birth']; ?></span>
-                                </div>
-
-                                <div class="d-flex align-items-center justify-content-between mt-3">
-                                    <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="map-pin" class="fea icon-sm me-2"></i> City:</span>
-                                    <span class="fw-medium"><?php echo $profile['loc']; ?></span>
-                                </div>
-
-                                <div class="d-flex align-items-center justify-content-between mt-3">
-                                    <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="globe" class="fea icon-sm me-2"></i> Country:</span>
-                                    <span class="fw-medium"><?php echo $profile['city']; ?></span>
-                                </div>
-
-                                <div class="d-flex align-items-center justify-content-between mt-3">
-                                    <span class="d-inline-flex align-items-center text-muted fw-medium"><i data-feather="phone" class="fea icon-sm me-2"></i> Mobile:</span>
-                                    <span class="fw-medium"><?php echo $profile['tel']; ?></span>
-                                </div>
-
-                                <div class="d-flex align-items-center justify-content-between mt-3">
-                                    <span class="text-muted fw-medium">Social:</span>
-                                    
-                                    <ul class="list-unstyled social-icon text-sm-end mb-0">
-                                        <li class="list-inline-item"><a href="../../../dribbble.com/shreethemes.html" target="_blank" class="rounded"><i data-feather="dribbble" class="fea icon-sm align-middle" title="dribbble"></i></a></li>
-                                        <li class="list-inline-item"><a href="../../../linkedin.com/company/shreethemes" target="_blank" class="rounded"><i data-feather="linkedin" class="fea icon-sm align-middle" title="Linkedin"></i></a></li>
-                                        <li class="list-inline-item"><a href="../../../www.facebook.com/shreethemes.html" target="_blank" class="rounded"><i data-feather="facebook" class="fea icon-sm align-middle" title="facebook"></i></a></li>
-                                        <li class="list-inline-item"><a href="../../../www.instagram.com/shreethemes/index.html" target="_blank" class="rounded"><i data-feather="instagram" class="fea icon-sm align-middle" title="instagram"></i></a></li>
-                                        <li class="list-inline-item"><a href="../../../twitter.com/shreethemes.html" target="_blank" class="rounded"><i data-feather="twitter" class="fea icon-sm align-middle" title="twitter"></i></a></li>
-                                    </ul><!--end icon-->
-                                </div>
-
-                                <div class="p-3 rounded shadow bg-white mt-2">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <i data-feather="file-text" class="fea icon-md"></i>
-                                        <h6 class="mb-0 ms-2"><?php echo $profile['cv']; ?></h6>
-                                    </div>
-
-                                    <a href="../images/calvin-carlo-resume.pdf" class="btn btn-primary w-100" download><i data-feather="download" class="fea icon-sm me-1"></i> Download CV</a>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+                    
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 mt-4 pt-2">
+                        <div class="position-relative features text-center p-4 rounded shadow bg-white">
+                            <div class="feature-icon bg-soft-primary rounded shadow mx-auto position-relative overflow-hidden d-flex justify-content-center align-items-center">
+                                <i data-feather="clock" class="fea icon-ex-md"></i>
+                            </div>
+    
+                            <div class="mt-4">
+                                <a href="#" class="title h5 text-dark">Save Time</a>
+                                <p class="text-muted mt-3 mb-0">Many desktop publishing now use and a search for job.</p>
+                                <div class="mt-3">
+                                    <a href="#" class="btn btn-link primary text-dark">Read More <i class="mdi mdi-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
                     </div><!--end col-->
                 </div><!--end row-->
             </div><!--end container-->
+        </section><!--end section-->
+        <!-- End -->
+
         <!-- Footer Start -->
         <footer class="bg-footer">
             <div class="py-5">
@@ -468,7 +481,6 @@ $user->AjouterMessage($_POST);
 
                         <div class="col-md-5 mt-4 mt-sm-0">
                             <div class="text-md-end ms-5 ms-sm-0">
-                                <a href="job-grid-four.php" class="btn btn-primary me-1 my-1">Apply Now</a>
                                 <a href="contactus.php" class="btn btn-soft-primary my-1">Contact Us</a>
                             </div>
                         </div><!--end col-->
@@ -482,7 +494,7 @@ $user->AjouterMessage($_POST);
                             <div class="row align-items-center">
                                 <div class="col-sm-3">
                                     <div class="text-center text-sm-start">
-                                        <a href="#"><img src="../images/logo-light.png" alt=""></a>
+                                        <a href="#"><img src="Views/images/logo-light.png" alt=""></a>
                                     </div>
                                 </div>
         
@@ -490,7 +502,6 @@ $user->AjouterMessage($_POST);
                                     <ul class="list-unstyled footer-list terms-service text-center text-sm-end mb-0">
                                         <li class="list-inline-item my-2"><a href="index.php" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> Home</a></li>
                                         <li class="list-inline-item my-2"><a href="../../services.html" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> How it works</a></li>
-                                        <li class="list-inline-item my-2"><a href="../../job-post.html" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> Create a job</a></li>
                                         <li class="list-inline-item my-2"><a href="../../aboutus.html" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> About us</a></li>
                                         <li class="list-inline-item my-2"><a href="../../pricing.html" class="text-foot fs-6 fw-medium"><i class="mdi mdi-circle-small"></i> Plans</a></li>
                                     </ul>
@@ -538,5 +549,5 @@ $user->AjouterMessage($_POST);
 	    <script src="../js/app.js"></script>
     </body>
 
-<!-- Mirrored from shreethemes.in/jobnova/layouts/candidate-profile.php by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Apr 2024 13:09:23 GMT -->
+<!-- Mirrored from shreethemes.in/jobnova/layouts/job-grid-four.php by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Apr 2024 13:09:24 GMT -->
 </html>

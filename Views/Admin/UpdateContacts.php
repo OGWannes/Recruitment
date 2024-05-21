@@ -1,6 +1,7 @@
 <?php
-include_once '../Auth/valid.php';
+
 include "../../Classes/Admin.php";
+
 
 if(isset($_SESSION['role'])){
 
@@ -9,20 +10,17 @@ if(isset($_SESSION['role'])){
 
     }
 
-}else{
-    header('location: ../Auth/login.php');
 }
 
-$users = new Admin();
-if(isset($_GET['deleteid'])){
-    $users->DeleteUser($_GET['deleteid'],$_GET['email']);
+
+$user = new Admin();
+
+if(isset($_GET['updateid'])){
+    $cl = $user->GetContact($_GET['updateid']);
 }
 
-$allusers = $users->GetUsers();
-$listeU = [];
-while ($U = $allusers->fetch()){
-    $listeU[] = $U;
-
+if(isset($_POST['update'])){
+    $user->UpdateContact($_POST,$_GET['updateid']);
 }
 
 ?>
@@ -57,6 +55,8 @@ while ($U = $allusers->fetch()){
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="assets/css/styleness.css" rel="stylesheet">
+
+
     <style>
 
 
@@ -84,6 +84,7 @@ while ($U = $allusers->fetch()){
 
     </style>
 
+
     <!-- =======================================================
     * Template Name: iPortfolio - v3.7.0
     * Template URL: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/
@@ -102,11 +103,10 @@ while ($U = $allusers->fetch()){
     <div class="d-flex flex-column">
 
         <div class="profile">
-            <br>
-            <h1 class="text-light"><a href="home.php">TEK JOB</a></h1>
+            <h1 class="text-light"><a href="home.php">TekJOB</a></h1>
             <div class="social-links mt-3 text-center">
-                <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-                <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+                <a href="https://www.facebook.com/gonsergroupofficial" class="facebook"><i class="bx bxl-facebook bx-tada-hover"></i></a>
+                <a href="https://www.linkedin.com/company/gonsergroup" class="linkedin"><i class="bx bxl-linkedin bx-tada-hover"></i></a>
             </div>
         </div>
 
@@ -131,109 +131,49 @@ while ($U = $allusers->fetch()){
     <section class="breadcrumbs">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
-                <h2>Bonjour TEKJOB Administrateur</h2>
+                <h2>Welcome TekJOB Administrateur</h2>
                 <?php echo date("d/m/Y"); ?>
                 <?php echo date("h:i:s");?>
                 <ol>
 
-                    <li><strong><button type="button" class="button1"><a href="../../Classes/Logout.php" class="text-light">Desconnect</a></button></strong></li>
+                    <li><strong><button type="button" class="button1"><a href="../Auth/logout.php" class="text-light">Déconnecter</a></button></strong></li>
                 </ol>
             </div>
 
         </div>
     </section><!-- End Breadcrumbs -->
 
-    <section id="home" class="d-flex flex-column justify-content-center align-items-center">
-        <div class="home" data-aos="fade-in">
-            <h1>TEK JOB</h1>
-            <center><span class="typed" data-typed-items="Wait for it, Wait... , LEGENDARYYYYYYY"></span></center>
-        </div>
-    </section>
-</main><!-- End #main -->
-
-<main id="main">
-    <section id="consultall" class="consultall">
+    <!-- ======= Update Section ======= -->
+    <section id="Update" class="Update">
         <div class="container">
 
             <div class="section-title">
-                <h2>Consulté</h2>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-7">
+                <h2>Mise a jour Status et consulter</h2>
+                <form id="update" class="clearfix" method="POST" action="">
+                    <strong><div class="section_subtitle left">Message </div></strong>
+                    <form action="" id="manage_employee">
+                        <div class="row">
+                            <div class="col-md-6 border-right">
+                                <h3><?php echo $cl['message'];?></h3>
+                                <label for="" class="control-label">Reponse :</label>
+                                <textarea name="message" class="form-control form-control-sm"><?php echo $cl['reponse'];?></textarea>
+                                <label for="" class="control-label">Status :</label>
+                                <select name="status" class="form-control form-control-sm" required>
+                                    <option value="<?php echo $cl['status'];?>"><?php echo $cl['status'];?></option>
+                                    <option value="Complete">Complete</option>
+                                    <option value="En cours">En cours</option>
+                                </select>
+                                <center><button type="submit" name="update" class="btn btn-primary mr-2">Update Contact</button></center>
 
-                            <form action="" method="GET">
-                                <div class="input-group mb-3">
-                                    <input type="text" name="search" placeholder="Nom/Prenom/EMAIL" required value="<?php if(isset($_GET['search'])){echo $_GET['search']; } ?>" class="form-control" placeholder="Search data">
-                                    <button type="submit" class="btn btn-primary">Cherche</button>
-                                </div>
-                            </form>
 
-                        </div>
-                    </div>
-                </div>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">id</th>
-                        <th scope="col">Prenom</th>
-                        <th scope="col">Nom</th>
-                        <th scope="col">E-mail</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    if (isset($_GET['search'])) {
-                        $filtervalues = $_GET['search'];
-                        $query = "SELECT * FROM user WHERE CONCAT (prenom,Nom,email) LIKE '%$filtervalues%' ";
-                        $query_run = mysqli_query($con, $query);
-                        if (mysqli_num_rows($query_run) > 0) {
-                            foreach ($query_run as $items) {
-                                ?>
-                                <tr>
-                                    <td><?= $items['id']; ?></td>
-                                    <td><?= $items['prenom']; ?></td>
-                                    <td><?= $items['nom']; ?></td>
-                                    <td><?= $items['email'] ?></td>
-                                    <td>
-                                        <button class="btn btn-primary"><?php echo '<a href="update.php?updateid='.$items['id'].'" class="text-light">Mise a jour</a>'?></button>
-                                        <button class="btn btn-danger"><?php echo '<a href="?deleteid='.$items['id'].'&email='.$items['email'].'"  class="text-light">Delete</a> '?></button>
-                                        </center></td>
-                                </tr>
-                                <?php
-                            }
-                        } else {
-                            ?>
-                            <?php
-                        }
-                    }else {
+                            </div>
 
-                        foreach ($listeU as $c) {
-                            echo "<tr>
-        <td>{$c['id']}</td>
-        <td>{$c['prenom']}</td>
-        <td>{$c['nom']}</td>
-        <td>{$c['email']}</td>
-        <td><button class='btn btn-primary'><a href='update.php?updateid={$c['id']}' class='text-light'>Mise a jour</a></button>
-        <button class='btn btn-danger'><a href='?deleteid={$c['id']}&email={$c['email']}'  class='text-light'>Delete</a></button> 
-        </td>
-        </tr>";
-                        }
-
-                    }?>
-                    </tbody>
-                </table>
-
+                    </form>
 
             </div>
 
-
         </div>
-        </div>
-
-        </div>
-    </section><!-- End Resume Section -->
-
+    </section><!-- End Update Section -->
     <!-- ======= Footer ======= -->
     <footer id="footer">
         <div class="container">
@@ -245,6 +185,7 @@ while ($U = $allusers->fetch()){
                 <!-- You can delete the links only if you purchased the pro version. -->
                 <!-- Licensing information: https://bootstrapmade.com/license/ -->
                 <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/ -->
+                Designed by <a href="https://www.linkedin.com/in/wannes-chayeb-4a61501a1/">Love ♥</a>
             </div>
         </div>
     </footer><!-- End  Footer -->

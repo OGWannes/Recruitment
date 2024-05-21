@@ -1,6 +1,7 @@
 <?php
 include_once '../Auth/valid.php';
 include "../../Classes/Admin.php";
+include "../../Classes/Job.php";
 
 if(isset($_SESSION['role'])){
 
@@ -13,14 +14,17 @@ if(isset($_SESSION['role'])){
     header('location: ../Auth/login.php');
 }
 
-$users = new Admin();
+$job = new Admin();
 if(isset($_GET['deleteid'])){
-    $users->DeleteUser($_GET['deleteid'],$_GET['email']);
+    $job->DeleteApp($_GET['deleteid']);
 }
-
-$allusers = $users->GetUsers();
+if(isset($_GET['updateid'])){
+    $job->UpdateStatusApp($_GET['updateid'],$_GET['jobid']);
+}
+$x = $_GET['jobid'];
+$allapps = $job->GetApps($x);
 $listeU = [];
-while ($U = $allusers->fetch()){
+while ($U = $allapps->fetch()){
     $listeU[] = $U;
 
 }
@@ -163,7 +167,7 @@ while ($U = $allusers->fetch()){
 
                             <form action="" method="GET">
                                 <div class="input-group mb-3">
-                                    <input type="text" name="search" placeholder="Nom/Prenom/EMAIL" required value="<?php if(isset($_GET['search'])){echo $_GET['search']; } ?>" class="form-control" placeholder="Search data">
+                                    <input type="text" name="search" placeholder="Status" required value="<?php if(isset($_GET['search'])){echo $_GET['search']; } ?>" class="form-control" placeholder="Search data">
                                     <button type="submit" class="btn btn-primary">Cherche</button>
                                 </div>
                             </form>
@@ -175,9 +179,11 @@ while ($U = $allusers->fetch()){
                     <thead>
                     <tr>
                         <th scope="col">id</th>
-                        <th scope="col">Prenom</th>
-                        <th scope="col">Nom</th>
+                        <th scope="col">Nom et prenom</th>
                         <th scope="col">E-mail</th>
+                        <th scope="col">Job Name</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
                     </thead>
@@ -185,19 +191,22 @@ while ($U = $allusers->fetch()){
                     <?php
                     if (isset($_GET['search'])) {
                         $filtervalues = $_GET['search'];
-                        $query = "SELECT * FROM user WHERE CONCAT (prenom,Nom,email) LIKE '%$filtervalues%' ";
+                        $query = "SELECT * FROM application WHERE CONCAT (status) LIKE '%$filtervalues%' ";
                         $query_run = mysqli_query($con, $query);
                         if (mysqli_num_rows($query_run) > 0) {
                             foreach ($query_run as $items) {
                                 ?>
                                 <tr>
                                     <td><?= $items['id']; ?></td>
-                                    <td><?= $items['prenom']; ?></td>
-                                    <td><?= $items['nom']; ?></td>
-                                    <td><?= $items['email'] ?></td>
+                                    <td><?= $items['name']?></td>
+                                    <td><?= $items['email']?></td>
+                                    <td><?= $items['job_name']; ?></td>
+                                    <td><?= $items['type_job']; ?></td>
+                                    <td><?= $items['status'] ?></td>
                                     <td>
-                                        <button class="btn btn-primary"><?php echo '<a href="update.php?updateid='.$items['id'].'" class="text-light">Mise a jour</a>'?></button>
-                                        <button class="btn btn-danger"><?php echo '<a href="?deleteid='.$items['id'].'&email='.$items['email'].'"  class="text-light">Delete</a> '?></button>
+                                        <button class="btn btn-primary"><?php echo '<a href="ConsultApps.php?updateid='.$items['id'].'&jobid='.$items['id_job'].'" class="text-light">Mise a jour</a>'?></button>
+                                        <button class="btn btn-danger"><?php echo '<a href="?deleteid='.$items['id'].'"  class="text-light">Delete</a> '?></button>
+                                        <button class="btn btn-warning"><?php echo '<a href="ConsultApp.php?consultid='.$items['id'].'"  class="text-light">Consult</a> '?></button>
                                         </center></td>
                                 </tr>
                                 <?php
@@ -209,13 +218,29 @@ while ($U = $allusers->fetch()){
                     }else {
 
                         foreach ($listeU as $c) {
+
+                            if ($c['status']=='En cours'){
+                                $s='<b></b><font color=#9acd32>';
+                                $e='</font></b>';
+                            }else if ($c['status']=='Complete'){
+                                $s='<b></b><font color=green>';
+                                $e='</font></b>';
+                            }else{
+                                $s='<b></b><font color=red>';
+                                $e='</font></b>';
+                            }
                             echo "<tr>
         <td>{$c['id']}</td>
-        <td>{$c['prenom']}</td>
-        <td>{$c['nom']}</td>
-        <td>{$c['email']}</td>
-        <td><button class='btn btn-primary'><a href='update.php?updateid={$c['id']}' class='text-light'>Mise a jour</a></button>
-        <button class='btn btn-danger'><a href='?deleteid={$c['id']}&email={$c['email']}'  class='text-light'>Delete</a></button> 
+        <td>{$c['name']}</td>
+         <td>{$c['email']}</td>
+        <td>{$c['job_name']}</td>
+        <td>{$c['type_job']}</td>
+        <td>{$s}{$c['status']}{$e}</td>
+       
+<td><button class='btn btn-primary'><a href='ConsultApps.php?updateid={$c['id']}&jobid={$c['id_job']}' class='text-light'>Mise a jour</a></button>
+        <button class='btn btn-danger'><a href='?deleteid={$c['id']}'  class='text-light'>Delete</a></button> 
+                <button class='btn btn-warning'><a href='ConsultApp.php?jobid={$c['id']}'  class='text-light'>Consult</a></button> 
+
         </td>
         </tr>";
                         }

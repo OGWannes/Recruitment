@@ -1,58 +1,42 @@
 <?php
-global $con;
-include_once 'conbase.php'; // Assuming this file contains your database connection code
-include_once 'delete.php';
 
-// Check if email parameter is set and not empty
-if(isset($_GET['email']) && !empty($_GET['email'])) {
-    $email = $_GET['email'];
+include_once "../Auth/valid.php";
+include "../../Classes/User.php";
 
-    // Prepare and execute the SELECT statement to fetch profile
-    $stmt = $con->prepare("SELECT * FROM profile WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+if(isset($_SESSION['role'])){
+    if($_SESSION['role'] != 'con'){
+        header('location: ../Auth/login.php');
 
-    // Fetch profile data
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $name = $row['name'];
-        $city = $row['city'];
-        $dob = $row['dob'];
-        $mobile = $row['mobile'];
-        $intro = $row['Introduction'];
-        $address = $row['Address'];
-    } else {
-        // Handle if no profile found for the provided email
-        echo "Profile not found!";
     }
-    $stmt->close();
 
-    // Check if the form is submitted
-    if (isset($_POST['submit'])) {
-        // Sanitize and validate input
-        $name = $_POST['name'] . " " . $_POST['last_name'];
-        $dob = $_POST['dob'];
-        $email = $_POST['email'];
-        $occ = $_POST['occupation'];
-        $location = $_POST['location'];
-        $cv = $_POST['cv'];
-        $intro = $_POST['introduction'];
-
-        // Prepare and execute the UPDATE statement
-        $stmt = $con->prepare("UPDATE profile SET name=?, email=?, dob=?, city=?, country=?, cv=?, Introduction=? WHERE email=?");
-        $stmt->bind_param("ssssssss", $name, $email, $dob, $city, $location, $cv, $intro, $email);
-        if ($stmt->execute()) {
-            echo "Profile updated successfully!";
-        } else {
-            echo "Error updating profile: " . $stmt->error;
-        }
-        $stmt->close();
-    }
-} else {
-    // Handle if email parameter is missing or empty
-    echo "Email parameter is missing!";
 }
+
+$user = new User();
+
+if (isset($_SESSION['id'])) {
+    $cl = $user->GetUser($_SESSION['id']);
+}
+
+if (isset($_SESSION['email'])) {
+    $profile = $user->GetProfile($_SESSION['email']);
+}
+
+if (isset($_POST['delete'])) {
+    $user->DeleteUser($_SESSION['id'],$_SESSION['email']);
+}
+
+if (isset($_SESSION['email'])) {
+    $experience = $user->GetExperience($_SESSION['email']);
+}
+
+if (isset($_POST['updateprofile'])){
+    $user->UpdateUserProfile($_POST,$_SESSION['email'],$_SESSION['id']);
+}
+if (isset($_POST['submitdata'])){
+    $user->UpdateUser($_POST,$_SESSION['id'],$_SESSION['password']);
+}
+
+
 ?>
 
 
@@ -71,23 +55,20 @@ if(isset($_GET['email']) && !empty($_GET['email'])) {
 	    <meta name="email" content="support@shreethemes.in" />
 	    <meta name="version" content="1.0.0" />
 	    <!-- favicon -->
-        <link href="Views/images/favicon.ico" rel="shortcut icon">
+        <link href="../images/favicon.ico" rel="shortcut icon">
 		<!-- Bootstrap core CSS -->
-	    <link href="Views/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-        <link href="Views/css/materialdesignicons.min.css" rel="stylesheet" type="text/css" />
+	    <link href="../css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+        <link href="../css/materialdesignicons.min.css" rel="stylesheet" type="text/css" />
 	    <!-- Custom  Css -->
-	    <link href="Views/css/style.min.css" rel="stylesheet" type="text/css" id="theme-opt" />
+	    <link href="../css/style.min.css" rel="stylesheet" type="text/css" id="theme-opt" />
 	</head>
 
 	<body>
         <!-- Navbar STart -->
         <header id="topnav" class="defaultscroll sticky">
             <div class="container">
-<<<<<<< HEAD
+                <a class="logo" href="../../index.php">
                 <a class="logo" href="index.php">
-=======
-                <a class="logo" href="Views/Condidate/index.php">
->>>>>>> 4d5de49 (Commitded for Gestion ADMIN)
                     <img src="Views/images/logo-dark.png" class="logo-light-mode" alt="">
                     <img src="Views/images/logo-light.png" class="logo-dark-mode" alt="">
                 </a>
@@ -126,18 +107,14 @@ if(isset($_GET['email']) && !empty($_GET['email'])) {
                     <li class="list-inline-item ps-1 mb-0">
                         <div class="dropdown dropdown-primary">
                             <button type="button" class="dropdown-toggle btn btn-sm btn-icon btn-pills btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="Views/images/team/01.jpg" class="img-fluid rounded-pill" alt="">
+                                <img src="../images/team/01.jpg" class="img-fluid rounded-pill" alt="">
                             </button>
                             <div class="dropdown-menu dd-menu dropdown-menu-end bg-white rounded shadow border-0 mt-3">
-<<<<<<< HEAD
                                 <a href="candidate-profile.php" class="dropdown-item fw-medium fs-6"><i data-feather="user" class="fea icon-sm me-2 align-middle"></i>Profile</a>
-=======
-                                <a href="Views/Condidate/candidate-profile.php" class="dropdown-item fw-medium fs-6"><i data-feather="user" class="fea icon-sm me-2 align-middle"></i>Profile</a>
->>>>>>> 4d5de49 (Commitded for Gestion ADMIN)
                                 <a href="candidate-profile-setting.html" class="dropdown-item fw-medium fs-6"><i data-feather="settings" class="fea icon-sm me-2 align-middle"></i>Settings</a>
                                 <div class="dropdown-divider border-top"></div>
-                                <a href="lock-screen.html" class="dropdown-item fw-medium fs-6"><i data-feather="lock" class="fea icon-sm me-2 align-middle"></i>Lockscreen</a>
-                                <a href="Views/Auth/login.php" class="dropdown-item fw-medium fs-6"><i data-feather="log-out" class="fea icon-sm me-2 align-middle"></i>Logout</a>
+                                <a href="../../lock-screen.html" class="dropdown-item fw-medium fs-6"><i data-feather="lock" class="fea icon-sm me-2 align-middle"></i>Lockscreen</a>
+                                <a href="../Auth/login.php" class="dropdown-item fw-medium fs-6"><i data-feather="log-out" class="fea icon-sm me-2 align-middle"></i>Logout</a>
                             </div>
                         </div>
                     </li>
@@ -150,70 +127,70 @@ if(isset($_GET['email']) && !empty($_GET['email'])) {
                             <a href="javascript:void(0)">Home</a><span class="menu-arrow"></span>
                             <ul class="submenu">
 <<<<<<< HEAD
-                                <li><a href="index.php" class="sub-menu-item">Hero One</a></li>
+                                <li><a href="../../index.php" class="sub-menu-item">Hero One</a></li>
 =======
-                                <li><a href="Views/Condidate/index.php" class="sub-menu-item">Hero One</a></li>
+                                <li><a href="index.php" class="sub-menu-item">Hero One</a></li>
 >>>>>>> 4d5de49 (Commitded for Gestion ADMIN)
-                                <li><a href="index-two.html" class="sub-menu-item">Hero Two</a></li>
-                                <li><a href="index-three.html" class="sub-menu-item">Hero Three</a></li>
+                                <li><a href="../../index-two.html" class="sub-menu-item">Hero Two</a></li>
+                                <li><a href="../../index-three.html" class="sub-menu-item">Hero Three</a></li>
                             </ul>
                         </li>
 
                         <li class="has-submenu parent-parent-menu-item"><a href="javascript:void(0)"> Jobs </a><span class="menu-arrow"></span>
                             <ul class="submenu">
-                                <li><a href="job-categories.html" class="sub-menu-item">Job Categories</a></li>
+                                <li><a href="../../job-categories.html" class="sub-menu-item">Job Categories</a></li>
                         
                                 <li class="has-submenu parent-menu-item">
                                     <a href="javascript:void(0)"> Job Grids </a><span class="submenu-arrow"></span>
                                     <ul class="submenu">
-                                        <li><a href="job-grid-one.html" class="sub-menu-item">Job Grid One</a></li>
-                                        <li><a href="job-grid-two.html" class="sub-menu-item">Job Grid Two</a></li>
-                                        <li><a href="job-grid-three.html" class="sub-menu-item">Job Grid Three</a></li>
-                                        <li><a href="job-grid-four.html" class="sub-menu-item">Job Grid Four </a></li>
+                                        <li><a href="../../job-grid-one.html" class="sub-menu-item">Job Grid One</a></li>
+                                        <li><a href="../../job-grid-two.html" class="sub-menu-item">Job Grid Two</a></li>
+                                        <li><a href="../../job-grid-three.html" class="sub-menu-item">Job Grid Three</a></li>
+                                        <li><a href="job-grid-four.php" class="sub-menu-item">Job Grid Four </a></li>
                                     </ul>  
                                 </li>
 
                                 <li class="has-submenu parent-menu-item">
                                     <a href="javascript:void(0)"> Job Lists </a><span class="submenu-arrow"></span>
                                     <ul class="submenu">
-                                        <li><a href="job-list-one.html" class="sub-menu-item">Job List One</a></li>
-                                        <li><a href="job-list-two.html" class="sub-menu-item">Job List Two</a></li>
+                                        <li><a href="../../job-list-one.html" class="sub-menu-item">Job List One</a></li>
+                                        <li><a href="../../job-list-two.html" class="sub-menu-item">Job List Two</a></li>
                                     </ul>  
                                 </li>
 
                                 <li class="has-submenu parent-menu-item">
                                     <a href="javascript:void(0)"> Job Detail </a><span class="submenu-arrow"></span>
                                     <ul class="submenu">
-                                        <li><a href="job-detail-one.html" class="sub-menu-item">Job Detail One</a></li>
-                                        <li><a href="job-detail-two.html" class="sub-menu-item">Job Detail Two</a></li>
-                                        <li><a href="job-detail-three.html" class="sub-menu-item">Job Detail Three</a></li>
+                                        <li><a href="../../job-detail-one.html" class="sub-menu-item">Job Detail One</a></li>
+                                        <li><a href="job-detail-two.php" class="sub-menu-item">Job Detail Two</a></li>
+                                        <li><a href="../../job-detail-three.html" class="sub-menu-item">Job Detail Three</a></li>
                                     </ul>  
                                 </li>
                 
-                                <li><a href="job-apply.html" class="sub-menu-item">Job Apply</a></li>
+                                <li><a href="job-apply.php" class="sub-menu-item">Job Apply</a></li>
                 
-                                <li><a href="job-post.html" class="sub-menu-item">Job Post </a></li>
+                                <li><a href="../../job-post.html" class="sub-menu-item">Job Post </a></li>
                 
-                                <li><a href="career.html" class="sub-menu-item">Career </a></li>
+                                <li><a href="../../career.html" class="sub-menu-item">Career </a></li>
                             </ul>  
                         </li>
                 
                         <li class="has-submenu parent-menu-item">
                             <a href="javascript:void(0)">Employers</a><span class="menu-arrow"></span>
                             <ul class="submenu">
-                                <li><a href="employers.html" class="sub-menu-item">Employers</a></li>
-                                <li><a href="employer-profile.html" class="sub-menu-item">Employer Profile</a></li>
+                                <li><a href="../../employers.html" class="sub-menu-item">Employers</a></li>
+                                <li><a href="../../employer-profile.html" class="sub-menu-item">Employer Profile</a></li>
                             </ul>
                         </li>
                 
                         <li class="has-submenu parent-menu-item">
                             <a href="javascript:void(0)">Candidates</a><span class="menu-arrow"></span>
                             <ul class="submenu">
-                                <li><a href="candidates.html" class="sub-menu-item">Candidates</a></li>
+                                <li><a href="../../candidates.html" class="sub-menu-item">Candidates</a></li>
 <<<<<<< HEAD
-                                <li><a href="candidate-profile.php" class="sub-menu-item">Candidate Profile</a></li>
+                                <li><a href="../../candidate-profile.php" class="sub-menu-item">Candidate Profile</a></li>
 =======
-                                <li><a href="Views/Condidate/candidate-profile.php" class="sub-menu-item">Candidate Profile</a></li>
+                                <li><a href="candidate-profile.php" class="sub-menu-item">Candidate Profile</a></li>
 >>>>>>> 4d5de49 (Commitded for Gestion ADMIN)
                                 <li><a href="candidate-profile-setting.html" class="sub-menu-item">Profile Setting</a></li>
                             </ul>
@@ -222,55 +199,55 @@ if(isset($_GET['email']) && !empty($_GET['email'])) {
                         <li class="has-submenu parent-parent-menu-item">
                             <a href="javascript:void(0)">Pages</a><span class="menu-arrow"></span>
                             <ul class="submenu">
-                                <li><a href="aboutus.html" class="sub-menu-item">About Us</a></li>
-                                <li><a href="services.html" class="sub-menu-item">Services</a></li>
-                                <li><a href="pricing.html" class="sub-menu-item">Pricing </a></li>
+                                <li><a href="../../aboutus.html" class="sub-menu-item">About Us</a></li>
+                                <li><a href="../../services.html" class="sub-menu-item">Services</a></li>
+                                <li><a href="../../pricing.html" class="sub-menu-item">Pricing </a></li>
 
                                 <li class="has-submenu parent-menu-item">
                                     <a href="javascript:void(0)"> Helpcenter </a><span class="submenu-arrow"></span>
                                     <ul class="submenu">
-                                        <li><a href="helpcenter-overview.html" class="sub-menu-item">Overview</a></li>
-                                        <li><a href="helpcenter-faqs.html" class="sub-menu-item">FAQs</a></li>
-                                        <li><a href="helpcenter-guides.html" class="sub-menu-item">Guides</a></li>
-                                        <li><a href="helpcenter-support.html" class="sub-menu-item">Support</a></li>
+                                        <li><a href="../../helpcenter-overview.html" class="sub-menu-item">Overview</a></li>
+                                        <li><a href="../../helpcenter-faqs.html" class="sub-menu-item">FAQs</a></li>
+                                        <li><a href="../../helpcenter-guides.html" class="sub-menu-item">Guides</a></li>
+                                        <li><a href="../../helpcenter-support.html" class="sub-menu-item">Support</a></li>
                                     </ul>  
                                 </li>
 
                                 <li class="has-submenu parent-menu-item"><a href="javascript:void(0)"> Blog </a><span class="submenu-arrow"></span>
                                     <ul class="submenu">
-                                        <li><a href="blogs.html" class="sub-menu-item"> Blogs</a></li>
-                                        <li><a href="blog-sidebar.html" class="sub-menu-item"> Blog Sidebar</a></li>
-                                        <li><a href="blog-detail.html" class="sub-menu-item"> Blog Detail</a></li>
+                                        <li><a href="../../blogs.html" class="sub-menu-item"> Blogs</a></li>
+                                        <li><a href="../../blog-sidebar.html" class="sub-menu-item"> Blog Sidebar</a></li>
+                                        <li><a href="../../blog-detail.html" class="sub-menu-item"> Blog Detail</a></li>
                                     </ul> 
                                 </li>
 
                                 <li class="has-submenu parent-menu-item"><a href="javascript:void(0)"> Auth Pages </a><span class="submenu-arrow"></span>
                                     <ul class="submenu">
-                                        <li><a href="Views/Auth/login.php" class="sub-menu-item"> Login</a></li>
-                                        <li><a href="Views/Auth/signup.php" class="sub-menu-item"> Signup</a></li>
-                                        <li><a href="reset-password.html" class="sub-menu-item"> Forgot Password</a></li>
-                                        <li><a href="lock-screen.html" class="sub-menu-item"> Lock Screen</a></li>
+                                        <li><a href="../Auth/login.php" class="sub-menu-item"> Login</a></li>
+                                        <li><a href="../Auth/signup.php" class="sub-menu-item"> Signup</a></li>
+                                        <li><a href="../../reset-password.html" class="sub-menu-item"> Forgot Password</a></li>
+                                        <li><a href="../../lock-screen.html" class="sub-menu-item"> Lock Screen</a></li>
                                     </ul> 
                                 </li>
 
                                 <li class="has-submenu parent-menu-item"><a href="javascript:void(0)"> Utility </a><span class="submenu-arrow"></span>
                                     <ul class="submenu">
-                                        <li><a href="terms.html" class="sub-menu-item">Terms of Services</a></li>
-                                        <li><a href="privacy.html" class="sub-menu-item">Privacy Policy</a></li>
+                                        <li><a href="../../terms.html" class="sub-menu-item">Terms of Services</a></li>
+                                        <li><a href="../../privacy.html" class="sub-menu-item">Privacy Policy</a></li>
                                     </ul>  
                                 </li>
 
                                 <li class="has-submenu parent-menu-item"><a href="javascript:void(0)"> Special </a><span class="submenu-arrow"></span>
                                     <ul class="submenu">
-                                        <li><a href="comingsoon.html" class="sub-menu-item"> Coming Soon</a></li>
-                                        <li><a href="maintenance.html" class="sub-menu-item"> Maintenance</a></li>
-                                        <li><a href="error.html" class="sub-menu-item"> 404! Error</a></li>
+                                        <li><a href="../../comingsoon.html" class="sub-menu-item"> Coming Soon</a></li>
+                                        <li><a href="../../maintenance.html" class="sub-menu-item"> Maintenance</a></li>
+                                        <li><a href="../../error.html" class="sub-menu-item"> 404! Error</a></li>
                                     </ul> 
                                 </li>
                             </ul>
                         </li>
                 
-                        <li><a href="contactus.html" class="sub-menu-item">Contact Us</a></li>
+                        <li><a href="contactus.php" class="sub-menu-item">Contact Us</a></li>
                     </ul><!--end navigation menu-->
                 </div><!--end navigation-->
             </div>
@@ -285,25 +262,25 @@ if(isset($_GET['email']) && !empty($_GET['email'])) {
                         <div class="position-relative">
                             <div class="candidate-cover">
                                 <div class="profile-banner relative text-transparent">
-                                    <input id="pro-banner" name="profile-banner" type="file" class="hidden" onchange="loadFile(event)" />
+                                    <input id="pro-banner" name="profile-banner" type="file" class="hidden"/>
                                     <div class="relative shrink-0">
-                                        <img src="Views/images/hero/bg5.jpg" class="rounded shadow" id="profile-banner" alt="">
+                                        <img src="../images/hero/bg5.jpg" class="rounded shadow" id="profile-banner" alt="">
                                         <label class="profile-image-label" for="pro-banner"></label>
                                     </div>
                                 </div>
                             </div>
                             <div class="candidate-profile d-flex align-items-end mx-2">
                                 <div class="profile-pic">
-                                    <input id="pro-img" name="profile-image" type="file" class="d-none" onchange="loadFile(event)" />
+                                    <input id="pro-img" name="profile-image" type="file" class="d-none"/>
                                     <div class="position-relative d-inline-block">
-                                        <img src="Views/images/team/01.jpg" class="avatar avatar-medium img-thumbnail rounded-pill shadow-sm" id="profile-image" alt="">
+                                        <img src="../images/team/01.jpg" class="avatar avatar-medium img-thumbnail rounded-pill shadow-sm" id="profile-image" alt="">
                                         <label class="icons position-absolute bottom-0 end-0" for="pro-img"><span class="btn btn-icon btn-sm btn-pills btn-primary"><i data-feather="camera" class="icons"></i></span></label>
                                     </div>
                                 </div>
 
                                 <div class="ms-2">
-                                    <h5 class="mb-0"><?php $name ?> </h5>
-                                    <p class="text-muted mb-0"><?php $occ ?></p>
+                                    <h5 class="mb-0"><?php echo $cl['prenom']; ?><?php echo " ",$cl['nom']; ?></h5>
+                                    <p class="text-muted mb-0"><?php echo $profile['occup'];?></p>
                                 </div>
                             </div>
                         </div>
@@ -315,40 +292,49 @@ if(isset($_GET['email']) && !empty($_GET['email'])) {
                 <div class="row">
                     <div class="col-12">
                         <div class="rounded shadow p-4">
-                            <form>
+                            <form method="POST">
                                 <h5>Personal Detail :</h5>
                                 <div class="row mt-4">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label fw-semibold">First Name:<span class="text-danger">*</span></label>
-                                            <input name="name" id="firstname" type="text" class="form-control" placeholder="First Name">
+                                            <label class="form-label fw-semibold">Prenom:<span class="text-danger">*</span></label>
+                                            <input name="prenom" id="firstname" type="text" class="form-control" value="<?php echo $cl['prenom']; ?>">
                                         </div>
                                     </div><!--end col-->
                                     
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label fw-semibold">Last Name:<span class="text-danger">*</span></label>
-                                            <input name="lastname" id="lastname" type="text" class="form-control" placeholder="Last Name">
+                                            <label class="form-label fw-semibold">Nom:<span class="text-danger">*</span></label>
+                                            <input name="nom" id="lastname" type="text" class="form-control" value="<?php echo $cl['nom']; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Date de naissance:<span class="text-danger">*</span></label>
+                                            <input name="date" id="lastname" type="text" class="form-control" value="<?php echo $profile['birth']; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">City:<span class="text-danger">*</span></label>
+                                            <input name="city" id="lastname" type="text" class="form-control" value="<?php echo $profile['city']; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Telephone:<span class="text-danger">*</span></label>
+                                            <input name="tel" id="lastname" type="text" class="form-control" value="<?php echo $profile['tel']; ?>">
                                         </div>
                                     </div><!--end col-->
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label fw-semibold">Your Email:<span class="text-danger">*</span></label>
-                                            <input name="email" id="email2" type="email" class="form-control" placeholder="Your email">
-                                        </div> 
-                                    </div><!--end col-->
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
                                             <label class="form-label fw-semibold">Occupation:</label>
-                                            <select class="form-control form-select" id="Type">
-                                                <option value="">Select an option</option>
-                                                <option value="WD">Web Developer</option>
-                                                <option value="UI">UI / UX Desinger</option>
-                                                <option value="UI">UI / UX Desinger</option>
-                                                <option value="UI">UI / UX Desinger</option>
-                                                <option value="UI">UI / UX Desinger</option>
+                                            <select class="form-control form-select" id="Type" name="occupation">
+                                                <option value="<?php echo $profile['occup']; ?>">Select an option</option>
+                                                <option value="Web Developer">Web Developer</option>
+                                                <option value="UI / UX Desinger">UI / UX Desinger</option>
+                                                <option value="System managment">System managment</option>
                                             </select>
                                         </div>
                                     </div><!--end col-->
@@ -356,17 +342,13 @@ if(isset($_GET['email']) && !empty($_GET['email'])) {
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label fw-semibold">Location:</label>
-                                            <select class="form-control form-select" id="Country">
-                                                <option value="">Select an option</option>
-                                                <option value="CAD">Canada</option>
-                                                <option value="CHINA">China</option>
-                                                <option value="CHINA">China</option>
-                                                <option value="CHINA">China</option>
-                                                <option value="CHINA">China</option>
-                                                <option value="CHINA">China</option>
-                                                <option value="CHINA">China</option>
-                                                <option value="CHINA">China</option>
-                                                <option value="CHINA">China</option>
+                                            <select class="form-control form-select" id="Country" name="location">
+                                                <option value="<?php echo $profile['loc']; ?>">Select an option</option>
+                                                <option value="Canada">Canada</option>
+                                                <option value="Tunisia">Tunisia</option>
+                                                <option value="Russia">Russia</option>
+                                                <option value="Germany">Germany</option>
+                                                <option value="USA">USA</option>
 
                                             </select>
                                         </div>
@@ -375,51 +357,44 @@ if(isset($_GET['email']) && !empty($_GET['email'])) {
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="formFile" class="form-label fw-semibold">Upload Your Cv / Resume :</label>
-                                            <input class="form-control" type="file" id="formFile">
+                                            <input class="form-control" type="file" id="formFile" name="filecv">
                                         </div>                                                                               
                                     </div><!--end col-->
 
                                     <div class="col-12">
                                         <div class="mb-3">
                                             <label class="form-label fw-semibold">Introduction :</label>
-                                            <textarea name="comments" id="comments2" rows="4" class="form-control" placeholder="Introduction :"></textarea>
+                                            <textarea name="intro" id="comments2" rows="4" class="form-control" ><?php echo $profile['intro']; ?></textarea>
                                         </div>
                                     </div><!--end col-->
 
                                     <div class="col-12">
-                                        <input type="submit" id="submit2" name="send" class="submitBnt btn btn-primary" value="Save Changes">
+                                        <button type="submit" name="updateprofile" class="submitBnt btn btn-primary">Save Changes</button>
                                     </div><!--end col-->
                                 </div>
                             </form>
                         </div>
 
                         <div class="rounded shadow p-4 mt-4">
-                            <form>
+                            <form method="POST">
                                 <div class="row">
                                     <div class="col-md-6 mt-4 pt-2">
-                                        <h5>Contact Info :</h5>
+                                        <h5>Acccount information:</h5>
 
-                                        <form>
+                                        <form method="POST">
                                             <div class="row mt-4">
                                                 <div class="col-lg-12">
                                                     <div class="mb-3">
-                                                        <label class="form-label fw-semibold">Phone No. :</label>
-                                                        <input name="number" id="number" type="number" class="form-control" placeholder="Phone :">
+                                                        <label class="form-label fw-semibold">Email :</label>
+                                                        <input name="email" id="email" type="email" class="form-control" value="<?php echo $cl['email']; ?>" required>
                                                     </div>
                                                 </div><!--end col-->
-
-                                                <div class="col-lg-12">
-                                                    <div class="mb-3">
-                                                        <label class="form-label fw-semibold">Website :</label>
-                                                        <input name="url" id="url" type="url" class="form-control" placeholder="Url :">
-                                                    </div>
-                                                </div><!--end col-->
-
-                                                <div class="col-lg-12 mt-2 mb-0">
-                                                    <button class="btn btn-primary">Add</button>
-                                                </div><!--end col-->
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-semibold">Re type - Email :</label>
+                                                    <input name="email2" id="email2" type="email" class="form-control" :" required>
+                                                </div>
+                                            </div>
                                             </div><!--end row-->
-                                        </form>
                                     </div><!--end col-->
                                     
                                     <div class="col-md-6 mt-4 pt-2"> 
@@ -429,26 +404,26 @@ if(isset($_GET['email']) && !empty($_GET['email'])) {
                                                 <div class="col-lg-12">
                                                     <div class="mb-3">
                                                         <label class="form-label fw-semibold">Old password :</label>
-                                                        <input type="password" class="form-control" placeholder="Old password" required="">
+                                                        <input name="pass1" type="password" class="form-control" placeholder="Old password" required="">
                                                     </div>
                                                 </div><!--end col-->
             
                                                 <div class="col-lg-12">
                                                     <div class="mb-3">
                                                         <label class="form-label fw-semibold">New password :</label>
-                                                        <input type="password" class="form-control" placeholder="New password" required="">
+                                                        <input name="pass2" type="password" class="form-control" placeholder="New password" required="">
                                                     </div>
                                                 </div><!--end col-->
             
                                                 <div class="col-lg-12">
                                                     <div class="mb-3">
                                                         <label class="form-label fw-semibold">Re-type New password :</label>
-                                                        <input type="password" class="form-control" placeholder="Re-type New password" required="">
+                                                        <input name="pass3" type="password" class="form-control" placeholder="Re-type New password" required="">
                                                     </div>
                                                 </div><!--end col-->
             
                                                 <div class="col-lg-12 mt-2 mb-0">
-                                                    <button class="btn btn-primary">Save password</button>
+                                                    <button type="submit" name="submitdata" class="btn btn-primary">Save</button>
                                                 </div><!--end col-->
                                             </div><!--end row-->
                                         </form>
@@ -458,7 +433,7 @@ if(isset($_GET['email']) && !empty($_GET['email'])) {
                         </div>
 
                         <div class="rounded shadow p-4 mt-4">
-                            <form action="" method="GET">
+                            <form  method="POST">
                                 <h5 class="text-danger">Delete Account :</h5>
                                 <div class="row mt-4">
                                     <h6 class="mb-0">Do you want to delete the account? Please press below "Delete" button</h6>
@@ -493,8 +468,8 @@ if(isset($_GET['email']) && !empty($_GET['email'])) {
 
                         <div class="col-md-5 mt-4 mt-sm-0">
                             <div class="text-md-end ms-5 ms-sm-0">
-                                <a href="job-apply.html" class="btn btn-primary me-1 my-1">Apply Now</a>
-                                <a href="contactus.html" class="btn btn-soft-primary my-1">Contact Us</a>
+                                <a href="job-grid-four.php" class="btn btn-primary me-1 my-1">Apply Now</a>
+                                <a href="contactus.php" class="btn btn-soft-primary my-1">Contact Us</a>
                             </div>
                         </div><!--end col-->
                     </div><!--end row-->
@@ -514,14 +489,14 @@ if(isset($_GET['email']) && !empty($_GET['email'])) {
                                 <div class="col-sm-9 mt-4 mt-sm-0">
                                     <ul class="list-unstyled footer-list terms-service text-center text-sm-end mb-0">
 <<<<<<< HEAD
-                                        <li class="list-inline-item my-2"><a href="index.php" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> Home</a></li>
+                                        <li class="list-inline-item my-2"><a href="../../index.php" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> Home</a></li>
 =======
-                                        <li class="list-inline-item my-2"><a href="Views/Condidate/index.php" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> Home</a></li>
+                                        <li class="list-inline-item my-2"><a href="index.php" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> Home</a></li>
 >>>>>>> 4d5de49 (Commitded for Gestion ADMIN)
-                                        <li class="list-inline-item my-2"><a href="services.html" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> How it works</a></li>
-                                        <li class="list-inline-item my-2"><a href="job-post.html" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> Create a job</a></li>
-                                        <li class="list-inline-item my-2"><a href="aboutus.html" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> About us</a></li>
-                                        <li class="list-inline-item my-2"><a href="pricing.html" class="text-foot fs-6 fw-medium"><i class="mdi mdi-circle-small"></i> Plans</a></li>
+                                        <li class="list-inline-item my-2"><a href="../../services.html" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> How it works</a></li>
+                                        <li class="list-inline-item my-2"><a href="../../job-post.html" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> Create a job</a></li>
+                                        <li class="list-inline-item my-2"><a href="../../aboutus.html" class="text-foot fs-6 fw-medium me-2"><i class="mdi mdi-circle-small"></i> About us</a></li>
+                                        <li class="list-inline-item my-2"><a href="../../pricing.html" class="text-foot fs-6 fw-medium"><i class="mdi mdi-circle-small"></i> Plans</a></li>
                                     </ul>
                                 </div><!--end col-->
                             </div><!--end row-->
@@ -560,11 +535,11 @@ if(isset($_GET['email']) && !empty($_GET['email'])) {
         <!-- Back to top -->
 
         <!-- JAVASCRIPTS -->
-	    <script src="Views/js/bootstrap.bundle.min.js"></script>
-        <script src="Views/js/feather.min.js"></script>
+	    <script src="../js/bootstrap.bundle.min.js"></script>
+        <script src="../js/feather.min.js"></script>
 	    <!-- Custom -->
-	    <script src="Views/js/plugins.init.js"></script>
-	    <script src="Views/js/app.js"></script>
+	    <script src="../js/plugins.init.js"></script>
+	    <script src="../js/app.js"></script>
     </body>
 
 <!-- Mirrored from shreethemes.in/jobnova/layouts/candidate-profile-setting.php by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 18 Apr 2024 13:09:23 GMT -->
